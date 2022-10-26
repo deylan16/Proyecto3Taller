@@ -1,0 +1,13 @@
+Consecutivo Factura: #0
+
+Cedula:1234567
+Nombre:Juan Perez
+Telefono:23658974
+
+Producto	Cantidad	Precio Unitario	total
+Blanquita	2
+500+ 13% 	 1130.0
+
+Total:1130.0
+Descuento:0%
+Total a Pagar:1130.0
