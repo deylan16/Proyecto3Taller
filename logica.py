@@ -1,5 +1,10 @@
 from pydoc import cli
 from LectorDeArchivos import *
+#Importación de librerías
+from tkinter import *
+from tkinter import ttk
+from tkinter import messagebox
+
 #Variables con la informacion de los archivos
 pasillos = CargarPasillos()
 productosPasillo = CargarProductospasillo(pasillos)
@@ -413,17 +418,32 @@ def Eliminarvendedores(CodVendedor,Nombre):
 
 #Retorna -1 si el codigo de pasillo no existe
 #Retorna -2 si el codigo pasiilo no es un numero
+def mostrarNuevoPasillo(lista):
+    listaStr = ["Código Pasillo: ", "Nombre: "]
+    totalStr = ""
+    for i in range(len(lista)):
+        if(i == len(lista)-1):
+            totalStr += listaStr[i]+lista[i]
+        else:
+            totalStr += listaStr[i]+lista[i]+"\n"
+            
+    return totalStr   
+
 def ModificarPasillo(CodPasillo,Nombre):
     global pasillos
-    listaCodigoPasillo=buscaEnLista2(pasillos,CodPasillo,0)
-    if not(verificaNumero(CodPasillo)):
-        return -2
+    CDP=CodPasillo.get()
+    Nom=Nombre.get()
+    listaCodigoPasillo=buscaEnLista2(pasillos,CDP,0)
+    if not(verificaNumero(CDP)):
+        return messagebox.showinfo("Error en el codigo de pasillo","El Codigo ingresado no existe")
     elif (listaCodigoPasillo)==[]:
-        return -1
+        return messagebox.showinfo("Error en el codigo de pasillo","El Codigo ingresado no existe")
     else:
-        nuevoPasillo = [CodPasillo,Nombre]
+        nuevoPasillo = [CDP,Nom]
         pasillos[listaCodigoPasillo[0]] = nuevoPasillo
-        return nuevoPasillo
+        totalInfo=mostrarNuevoPasillo(nuevoPasillo)
+        return messagebox.showinfo("Pasillo Modificado", totalInfo)
+        
     
 #Retorna -1 si el codigo de pasillo no existe
 #Retorna -2 si el codigo pasiilo no es un numero 
@@ -808,7 +828,12 @@ def ProductosDeUnPasillo(CodPasillo):
         return ((Hagalista(productosPasillo,CodPasillo,0)))
 #12.Clientes del supermercado
 def ClientesDelSupermercado():
-    return clientes
+    Clientes = clientes
+    with open('Reporte-Clientes.txt','w') as reporte:
+        for i in Clientes:
+            reporte.write(i[0]+" "+i[1]+" "+i[2]+" "+i[3]+'\n')
+        return messagebox.showinfo("Reporte Creado","El reporte se creo correctamente")
+            
 #13.Pasillos del supermercado
 def PasillosDelSupermercado():
     return pasillos
@@ -914,8 +939,370 @@ def Comprar(cedula):
         listaCompraCliente += [productoscomprados]
         registroTienda += [listaCompraCliente]
         productoscomprados = []
-print(marcasProductos)
-print("*************\n")
-print(PromedioPreciosDeUnProducto())        
+    print(marcasProductos)
+    print("*************\n")
+    print(PromedioPreciosDeUnProducto())
+
+#---------------------------Ventana de Modificar-------------------------------
+def ventanaModificarP():
+    ventanaMP= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
+    ventanaMP.geometry("400x300")
+    ventanaMP.title("Modificar Pasillo")
+
+    codpasillo= Label(ventanaMP, text="Ingrese el cod del pasillo a modificar")
+    codpasillo.place(x=30, y=10)
+    cajapasillo = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajapasillo.place(x=230, y=10)
+
+    codnombre= Label(ventanaMP, text="Ingrese el nuevo nombre")
+    codnombre.place(x=70, y=50)
+    cajanombre = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajanombre.place(x=230, y=50)
+    
+    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda:ModificarPasillo(cajapasillo,cajanombre))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
+    botonRegresar.place(x=340, y=250)
+
+
+    
+#---------------------------Ventana de Mantenimiento de la base de datos-------------------------------
+
+
+
+def ventanaInsert():
+    ventanaI = Toplevel()
+    ventanaI.geometry("340x340")
+    ventanaI.title("Insertar")
+
+    opcion1 = Button(ventanaI , text="Pasillo")
+    opcion1.place(x=20,y=10)
+
+    opcion2 = Button(ventanaI , text="Producto Nuevo")
+    opcion2.place(x=20,y=50)
+
+    opcion3 = Button(ventanaI , text="Marca Nueva")
+    opcion3.place(x=20,y=90)
+
+    opcion4 = Button(ventanaI , text="Inventario")
+    opcion4.place(x=20,y=130)
+    
+    opcion5 = Button(ventanaI , text="Registrar Clientes")
+    opcion5.place(x=20,y=170)
+
+    opcion6 = Button(ventanaI , text="Registrar Administradores")
+    opcion6.place(x=20,y=210)
+
+    opcion7 = Button(ventanaI , text="Registrar Vendedores")
+    opcion7.place(x=20,y=250)
+
+    Regresar = Button(ventanaI,text="Regresar", command = lambda:salirVentana(ventanaI))
+    Regresar.place(x=20,y=290)
+
+def ventanaEliminar():
+    ventanaE = Toplevel()
+    ventanaE.geometry("340x340")
+    ventanaE.title("Eliminar")
+
+    opcion1 = Button(ventanaE , text="Pasillo")
+    opcion1.place(x=20,y=10)
+
+    opcion2 = Button(ventanaE , text="Producto")
+    opcion2.place(x=20,y=50)
+
+    opcion3 = Button(ventanaE , text="Marca")
+    opcion3.place(x=20,y=90)
+
+    opcion4 = Button(ventanaE , text="Inventario")
+    opcion4.place(x=20,y=130)
+    
+    opcion5 = Button(ventanaE , text="Clientes")
+    opcion5.place(x=20,y=170)
+
+    opcion6 = Button(ventanaE , text="Administradores")
+    opcion6.place(x=20,y=210)
+
+    opcion7 = Button(ventanaE , text="Vendedores")
+    opcion7.place(x=20,y=250)
+
+    Regresar = Button(ventanaE,text="Regresar", command = lambda:salirVentana(ventanaE))
+    Regresar.place(x=20,y=290)
+    
+def ventanaModificar():
+    ventanaMod = Toplevel()
+    ventanaMod.geometry("340x340")
+    ventanaMod.title("Modificar")
+
+    opcion1 = Button(ventanaMod , text="Pasillo", command = lambda:ventanaModificarP())
+    opcion1.place(x=20,y=10)
+
+    opcion2 = Button(ventanaMod , text="Producto")
+    opcion2.place(x=20,y=50)
+
+    opcion3 = Button(ventanaMod , text="Marca")
+    opcion3.place(x=20,y=90)
+
+    opcion4 = Button(ventanaMod , text="Inventario")
+    opcion4.place(x=20,y=130)
+    
+    opcion5 = Button(ventanaMod , text="Clientes")
+    opcion5.place(x=20,y=170)
+
+    opcion6 = Button(ventanaMod , text="Administradores")
+    opcion6.place(x=20,y=210)
+
+    opcion7 = Button(ventanaMod , text="Vendedores")
+    opcion7.place(x=20,y=250)
+
+    Regresar = Button(ventanaMod,text="Regresar", command = lambda:salirVentana(ventanaMod))
+    Regresar.place(x=20,y=290)
+
+def ventanaManteB():
+    ventanaMB = Toplevel()
+    ventanaMB.geometry("340x340")
+    ventanaMB.title("Mantenimiento de base de datos")
+
+    opcion1 = Button(ventanaMB , text="Insertar",command = lambda:ventanaInsert())
+    opcion1.place(x=20,y=10)
+
+    opcion2 = Button(ventanaMB , text="Eliminar",command = lambda:ventanaEliminar())
+    opcion2.place(x=20,y=50)
+
+    opcion3 = Button(ventanaMB , text="Modificar",command = lambda:ventanaModificar())
+    opcion3.place(x=20,y=90)
+
+    opcion4 = Button(ventanaMB , text="Consultar Precio")
+    opcion4.place(x=20,y=130)
+    
+    opcion5 = Button(ventanaMB , text="Consultar Descuento")
+    opcion5.place(x=20,y=170)
+
+    opcion6 = Button(ventanaMB , text="Modificar el Descuento")
+    opcion6.place(x=20,y=210)
+
+    Regresar = Button(ventanaMB,text="Regresar", command = lambda:salirVentana(ventanaMB))
+    Regresar.place(x=20,y=250)
+
+#---------------------------Ventana Reportes-------------------------------
+def ventanaReportes():
+    ventanaRep = Toplevel()
+    ventanaRep.geometry("750x700")
+    ventanaRep.title("Reportes")
+
+    opcion1 = Button(ventanaRep , text="Pasillo más visitado", command = lambda:PasilloMasVisitado())
+    opcion1.place(x=20,y=10)
+
+    opcion2 = Button(ventanaRep , text="Pasillo menos visitado", command = lambda:PasilloMenosVisitado())
+    opcion2.place(x=20,y=50)
+
+    opcion3 = Button(ventanaRep , text="Productos por pasillo más vendidos", command = lambda:ProductosPorPasilloMasVendido(CodPasillo))
+    opcion3.place(x=20,y=90)
+
+    opcion4 = Button(ventanaRep , text="Marcas más vendidos", command = lambda:MarcasMasVendidas())
+    opcion4.place(x=20,y=130)
+    
+    opcion5 = Button(ventanaRep , text="Cliente que más compro", command = lambda:ClienteQueMasCompro())
+    opcion5.place(x=20,y=170)
+
+    opcion6 = Button(ventanaRep , text="Cliente que menos compro", command = lambda:ClienteQueMenosCompro())
+    opcion6.place(x=20,y=210)
+
+    opcion7 = Button(ventanaRep , text="Producto que más se cargó en las Góndolas", command = lambda:ProductoQueMasSeCargoEnLasGondolas())
+    opcion7.place(x=20,y=250)
+
+    opcion8 = Button(ventanaRep , text="Cliente que más facturo", command = lambda:ClienteQueMasFacturo())
+    opcion8.place(x=20,y=290)
+
+    opcion9 = Button(ventanaRep , text="Marcas de un producto", command = lambda:MarcasDeUnProducto(CodProducto))
+    opcion9.place(x=20,y=330)
+
+    opcion10 = Button(ventanaRep , text="Factura de mayor monto", command = lambda:FacturaDeMayorMonto())
+    opcion10.place(x=20,y=370)
+    
+    opcion11 = Button(ventanaRep , text="Productos de un pasillo", command = lambda:ProductosDeUnPasillo(CodPasillo))
+    opcion11.place(x=20,y=410)
+
+    opcion12 = Button(ventanaRep , text="Clientes del supermercado", command = lambda:ClientesDelSupermercado())
+    opcion12.place(x=20,y=450)
+
+    opcion13 = Button(ventanaRep , text="Pasillos del supermercado", command = lambda:PasillosDelSupermercado())
+    opcion13.place(x=20,y=490)
+
+    opcion14 = Button(ventanaRep , text="Inventario del supermercado", command = lambda:InventarioDelSupermercado())
+    opcion14.place(x=20,y=530)
+
+    opcion15 = Button(ventanaRep , text="Últimos dos productos insertados al inventario", command = lambda:UltimosDosProductosInsertadosAlInventario())
+    opcion15.place(x=20,y=570)
+
+    opcion16 = Button(ventanaRep , text="Ultimo Producto modificado", command = lambda:ultimoProductoModificado())
+    opcion16.place(x=20,y=610)
+    
+    opcion17 = Button(ventanaRep , text="Promedio de Precios de un producto", command = lambda:PromedioPreciosDeUnProducto())
+    opcion17.place(x=20,y=650)
+
+    Regresar = Button(ventanaRep,text="Regresar", command = lambda:salirVentana(ventanaRep))
+    Regresar.place(x=20,y=690)
+
+
+#---------------------------Ventanas Administrador,Cliente R y NR y Vendedor-------------------------------
+def ventanaAdmin():
+    ventanaAd = Toplevel()
+    ventanaAd.geometry("340x340")
+    ventanaAd.title("Administrador")
+
+    opcion1 = Button(ventanaAd , text="Mantenimiento de la Base de Datos", command = lambda:ventanaManteB())
+    opcion1.place(x=20,y=10)
+
+    opcion2 = Button(ventanaAd , text="Facturar")
+    opcion2.place(x=20,y=50)
+
+    opcion3 = Button(ventanaAd , text="Revisar gondolas")
+    opcion3.place(x=20,y=90)
+
+    opcion4 = Button(ventanaAd , text="Verificar inventario")
+    opcion4.place(x=20,y=130)
+    
+    opcion5 = Button(ventanaAd , text="Reportes", command= lambda:ventanaReportes())
+    opcion5.place(x=20,y=170)
+
+    Regresar = Button(ventanaAd,text="Regresar", command = lambda:salirVentana(ventanaAd))
+    Regresar.place(x=20,y=210)
+
+def ventanaClienR():
+    ventanaCr = Toplevel()
+    ventanaCr.geometry("340x340")
+    ventanaCr.title("Cliente Registrado")
+
+    opcion1 = Button(ventanaCr , text="Consultar Precio")
+    opcion1.place(x=20,y=10)
+
+    opcion2 = Button(ventanaCr , text="Consultar Descuento")
+    opcion2.place(x=20,y=50)
+
+    opcion3 = Button(ventanaCr, text="Consultar Productos")
+    opcion3.place(x=20,y=90)
+
+    opcion4 = Button(ventanaCr , text="Comprar")
+    opcion4.place(x=20,y=130)
+
+    Regresar = Button(ventanaCr,text="Regresar", command = lambda:salirVentana(ventanaCr))
+    Regresar.place(x=20,y=170)
+
+def ventanaClienNR():
+    ventanaCnr = Toplevel()
+    ventanaCnr.geometry("340x340")
+    ventanaCnr.title("Cliente No Registrado")
+
+    opcion1 = Button(ventanaCnr , text="Consultar Precio")
+    opcion1.place(x=20,y=10)
+
+    opcion2 = Button(ventanaCnr , text="Consultar Descuento",fg = "grey")
+    opcion2.place(x=20,y=50)
+
+    opcion3 = Button(ventanaCnr, text="Consultar Productos")
+    opcion3.place(x=20,y=90)
+
+    opcion4 = Button(ventanaCnr , text="Comprar",fg = "grey")
+    opcion4.place(x=20,y=130)
+
+    Regresar = Button(ventanaCnr,text="Regresar", command = lambda:salirVentana(ventanaCnr))
+    Regresar.place(x=20,y=170)
+
+
+
+def ventanaVende():
+    ventanaV = Toplevel()
+    ventanaV.geometry("340x340")
+    ventanaV.title("Vendedor")
+
+    opcion1 = Button(ventanaV , text="Consultar Precio")
+    opcion1.place(x=20,y=10)
+
+    opcion2 = Button(ventanaV , text="Consultar Descuento de un cliente")
+    opcion2.place(x=20,y=50)
+
+    opcion3 = Button(ventanaV, text="Consultar Productos de un pasillo")
+    opcion3.place(x=20,y=90)
+
+    opcion4 = Button(ventanaV , text="Consultar Marcas de un producto")
+    opcion4.place(x=20,y=130)
+
+    Regresar = Button(ventanaV,text="Regresar", command = lambda:salirVentana(ventanaV))
+    Regresar.place(x=20,y=170)
+    
+
+#---------------------------Verificacion de codigo-----------------------------------------------------    
+def verificaAdministrador(codigo):#Hace la verifiacion del codigo de administrador
+        CA=codigo.get()
+        if buscaEnLista(Administradores,CA,0) != -1:
+            ventanaAdmin()
+        else:
+            return messagebox.showinfo("Error en el codigo de administrador","El Codigo ingresado no existe")
+            #Regresa mensaje de error
+        
+def verificaCliente(codigo1):#Hace la verifiacion del codigo de cliente
+        CC=codigo1.get()
+        if buscaEnLista(clientes,CC,0) != -1:
+            ventanaClienR()
+        else:
+            ventanaClienNR()
+    
+######################################################
+
+def salirVentana(ventana):#Sale de la ventana
+    ventana.destroy()
+
+def ventanaVA():
+    ventanaVA= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
+    ventanaVA.geometry("400x300")
+    ventanaVA.title("Aministrador")
+
+    codadmi= Label(ventanaVA, text="ingrese el cod administrador")
+    codadmi.place(x=30, y=10)
+    cajaadmi = Entry(ventanaVA) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajaadmi.place(x=220, y=10)
+    
+    botonAceptar = Button(ventanaVA, text="Aceptar", command=lambda:verificaAdministrador(cajaadmi))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaVA, text="Regresar", command=lambda:salirVentana(ventanaVA))
+    botonRegresar.place(x=340, y=250)
+    
+def ventanaVC():
+    ventanaVC= Toplevel() #Crea otra ventana aparte de la principal para verificar cliente
+    ventanaVC.geometry("400x300")
+    ventanaVC.title("Cliente")
+
+    codcli= Label(ventanaVC, text="ingrese el cod cliente")
+    codcli.place(x=30, y=10)
+    cajacli = Entry(ventanaVC) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajacli.place(x=220, y=10)
+    
+    botonAceptar = Button(ventanaVC, text="Aceptar", command=lambda:verificaCliente(cajacli))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaVC, text="Regresar", command=lambda:salirVentana(ventanaVC))
+    botonRegresar.place(x=340, y=250)
+            
+
+
+
+#---------------------------Menú principal-----------------------------------------------------
+menu = Tk() 
+menu.title("Sistema de Punto y Venta")
+menu.geometry("300x300")
+
+adminbttn = Button(menu,text="Administrador",command = lambda:ventanaVA())#Boton administrador
+adminbttn.place(x=20,y=10)
+
+clientebttn = Button(menu,text="Cliente",command = lambda:ventanaVC())#Boton Cliente
+clientebttn.place(x=20,y=50)
+
+vendedorbttn = Button(menu,text="Vendedor",command = lambda:ventanaVende())#Boton vendedor
+vendedorbttn.place(x=20,y=90)
+
+salirbttn = Button(menu,text="Salir", command = lambda:salirVentana(menu))#Boton para salir del menu
+salirbttn.place(x=20,y=250)
+
+menu.mainloop()
+
 
 
