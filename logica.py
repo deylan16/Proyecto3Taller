@@ -1182,11 +1182,33 @@ def ventanaClienR():
     opcion3 = Button(ventanaCr, text="Consultar Productos")
     opcion3.place(x=20,y=90)
 
-    opcion4 = Button(ventanaCr , text="Comprar")
+    opcion4 = Button(ventanaCr , text="Comprar",command= lambda:ventanaComprar())
     opcion4.place(x=20,y=130)
 
     Regresar = Button(ventanaCr,text="Regresar", command = lambda:salirVentana(ventanaCr))
     Regresar.place(x=20,y=170)
+
+#---------------------------------------------Ventana de Comprar-----------------------------------------------------------
+def ventanaComprar():
+    ventanaCm=  Toplevel()
+    ventanaCm.geometry("700x700")
+    ventanaCm.config(bg="sky blue")
+    ventanaCm.title("Comprar")
+
+    opcion1=Button(ventanaCm, text="Pasillo")
+    opcion1.place(x=20,y=10)
+
+    Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
+
+
+
+
+
+
+
+
+
+
 
 def ventanaClienNR():
     ventanaCnr = Toplevel()
