@@ -1260,11 +1260,20 @@ def ventanaProductos(pasillo):
         
         if i[0] == pasillo:
             print("imagenes del proyecto/"+i[2]+".png")
-            imagen1=PhotoImage(file="imagenes del proyecto/"+"Arroz"+".png")
-            imagen_sub=imagen1.subsample(3)
             
-            boton = Button(ventanaCm, text=i[2],image=imagen_sub)
-            boton.place(x=contadorx,y=contadory)
+            if (i[2] == "Arroz"):
+                imagen1=PhotoImage(file="imagenes del proyecto/"+"Arroz"+".png")
+                imagen_sub=imagen1.subsample(3)    
+            
+                boton = Button(ventanaCm, text=i[2],image=imagen_sub)
+                boton.place(x=contadorx,y=contadory)
+            elif (i[2] == "Frijoles"):
+                imagen2=PhotoImage(file="imagenes del proyecto/"+"Frijoles"+".png")
+                imagen_sub2=imagen2.subsample(3)    
+            
+                boton2 = Button(ventanaCm, text=i[2],image=imagen_sub2)
+                boton2.place(x=contadorx,y=contadory)
+                
             contadory += 200
             listaProductosdisponles += [i]
             if contadory >= 750:
