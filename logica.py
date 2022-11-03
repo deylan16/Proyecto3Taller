@@ -656,7 +656,7 @@ def facturar():
             cantidad = facturando[1][i][4] 
             precio = facturando[1][i][5]
             producto = facturando[1][i][3]
-            string = ""+producto+"\t"+cantidad+"\n"+precio
+            string = ""+producto+"\t"+cantidad+"\t\t"+precio+"\t\t\t"
             ListaProductos += [[facturando[1][i][2],facturando[1][i][4]]]
             productoMarca1 = buscaEnLista(marcasProductos,facturando[1][i][2],2)
             print(marcasProductos[productoMarca1][4] )
@@ -866,7 +866,7 @@ def PromedioPreciosDeUnProducto():
 
 #########################
 #comprar
-CedulaClienteActual = "1234567";   
+cedulaActual = ""
 productoscomprados = []
 
 #agrega producto al carrito
@@ -928,7 +928,9 @@ def EliminarProductoCarrito(CodPasillo,CodProducto,CodMarca):
 #agrega carrito a facturar  
 #Retorna -1 si no se ha comprado nada  
 def Comprar(cedula):
+    
     global registroTienda,productoscomprados
+    print(productoscomprados)
     if productoscomprados == []:
         return -1
     else:
@@ -939,9 +941,7 @@ def Comprar(cedula):
         listaCompraCliente += [productoscomprados]
         registroTienda += [listaCompraCliente]
         productoscomprados = []
-    print(marcasProductos)
-    print("*************\n")
-    print(PromedioPreciosDeUnProducto())
+    
 
 #---------------------------Ventana de Modificar-------------------------------
 def ventanaModificarP():
@@ -1153,7 +1153,7 @@ def ventanaAdmin():
     opcion1 = Button(ventanaAd , text="Mantenimiento de la Base de Datos", command = lambda:ventanaManteB())
     opcion1.place(x=20,y=10)
 
-    opcion2 = Button(ventanaAd , text="Facturar")
+    opcion2 = Button(ventanaAd , text="Facturar",command=lambda: facturar())
     opcion2.place(x=20,y=50)
 
     opcion3 = Button(ventanaAd , text="Revisar gondolas")
@@ -1188,42 +1188,174 @@ def ventanaClienR():
     Regresar = Button(ventanaCr,text="Regresar", command = lambda:salirVentana(ventanaCr))
     Regresar.place(x=20,y=170)
 
+
 #---------------------------------------------Ventana de Comprar-----------------------------------------------------------
+
+
+#cargar las imagenes
+    #imagen1=PhotoImage(file="imagenes del proyecto/arroz.png")
+    #imagen_sub=imagen1.subsample(3)
+    #lbl_imagen1=Label(ventanaCm, image=imagen_sub).place(x=100,y=100)
+    
+    #lbl_imagen1.place(x=100,y=100)
+botones = []
 def ventanaComprar():
+    global botones
     ventanaCm=  Toplevel()
+    
     ventanaCm.geometry("700x700")
     ventanaCm.config(bg="sky blue")
     ventanaCm.title("Comprar")
 
-    opcion1=Button(ventanaCm, text="Pasillo", command= lambda:CargarProductospasillo(pasillos))
-    opcion1.place(x=20,y=10)
+    contadorx = 0
+    contadory = 150
+    contador = 0
+    for i in pasillos:
+        
+        boton = Button(ventanaCm, text=i[0]+":"+i[1])
+        boton.place(x=contadorx,y=contadory)
+        botones += [boton]
+        
+        
+        contadory += 30
+        if contadory >= 750:
+            contadory = 150
+            contadorx += 50
+        contador+= 1
+    codPasillo= Label(ventanaCm, text="Seleccione el pasillo")
+    codPasillo.place(x=20, y=40)
+    
+    combo = ttk.Combobox(ventanaCm,values=pasillos,state="readonly")
+    combo.place(x=20, y=60)
+    
+    Aceptar=Button(ventanaCm,text="Aceptar", command= lambda:ventanaProductos(combo.get()))
+    Aceptar.place(x=20,y=80)
+    
+    #for i in botones:
+    #    i.config( command= lambda:ventanaProductos(i))
+    
+    finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+    finalizarCompra.place(x=20,y=650)
+    
+    Regresar=Button(ventanaCm,text="Regresar", command= lambda:ventanaProductos(ventanaCm))
+    Regresar.place(x=620,y=650)
+    
+    ventanaCm.mainloop()
+    
+def ventanaProductos(pasillo):
+    
+    print("***")
+    pasillo = pasillo.split(" ")[0]
+    print(pasillo)
+    ventanaCm=  Toplevel()
+    
+    ventanaCm.geometry("700x700")
+    ventanaCm.config(bg="sky blue")
+    ventanaCm.title("Productos")
 
-##    codPasillo= Label(ventanaCm, text="Ingrese el cod del Pasillo")
-##    codPasillo.place(x=20, y=40)
-##    cajapasillo = Entry(ventanaCm) #Caja de texto donde almacena/captura lo que el usuario ingresa
-##    cajapasillo.place(x=20, y=60)
-##    codProducto=Label(ventanaCm, text="Ingrese el cod del Producto")
-##    codProducto.place(x=20, y=80)
-##    cajaProducto= Entry(ventanaCm)
-##    cajaProducto.place(x=20,y=100)
-##    codMarca=Label(ventanaCm,text="Ingrese el cod de Marca")
-##    codMarca.place(x=20,y=120)
-##    cajamarca=Entry(ventanaCm)
-##    cajamarca.place(x=20,y=140)
-##    cantidadComprar=Label(ventanaCm, text="Digite la cantidad que desea comprar")
-##    cantidadComprar.place(x=20, y=160)
-##    cajacantidad=Entry(ventanaCm)
-##    cajacantidad.place(x=20,y=180)
-##    botonAceptar = Button(ventanaCm, text="Aceptar", command=lambda:comprando(cajapasillo,cajaproducto,cajamarca,cajacantidad))
-##    botonAceptar.place(x=250, y=250)
+    contadorx = 0
+    contadory = 150
+    listaProductosdisponles = []
+    for i in productosPasillo:
+        
+        if i[0] == pasillo:
+            print("imagenes del proyecto/"+i[2]+".png")
+            imagen1=PhotoImage(file="imagenes del proyecto/"+"Arroz"+".png")
+            imagen_sub=imagen1.subsample(3)
+            
+            boton = Button(ventanaCm, text=i[2],image=imagen_sub)
+            boton.place(x=contadorx,y=contadory)
+            contadory += 200
+            listaProductosdisponles += [i]
+            if contadory >= 750:
+                contadory = 150
+                contadorx += 50
+
+    
+    codPasillo= Label(ventanaCm, text="Seleccione el producto")
+    codPasillo.place(x=20, y=40)
+    
+    combo = ttk.Combobox(ventanaCm,values=listaProductosdisponles,state="readonly")
+    combo.place(x=20, y=60)
+    
+    Aceptar=Button(ventanaCm,text="Aceptar", command= lambda:ventanaMarcas(pasillo,combo.get()))
+    Aceptar.place(x=20,y=80)
+    
+    
     Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
-    Regresar.place(x=280,y=280)
-    #cargar las imagenes
-    imagen1=PhotoImage(file="arroz.png")
-    lbl_imagen1=Label(ventanaCm, image=imagen1).place(x=100,y=100)
-    lbl_imagen1.pack()
+    Regresar.place(x=620,y=650)
+    finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+    finalizarCompra.place(x=20,y=650)
+    
+    ventanaCm.mainloop()    
 
+def ventanaMarcas(pasillo,producto):
+    ventanaCm=  Toplevel()
+    producto = producto.split(" ")[1]
+    
+    ventanaCm.geometry("700x700")
+    ventanaCm.config(bg="sky blue")
+    ventanaCm.title("Marcas")
 
+    contadorx = 0
+    contadory = 150
+    listamarcasDiponibles = []
+    for i in marcasProductos:
+        if i[0] == pasillo:
+            if i[1] == producto:
+                boton = Button(ventanaCm, text=i[3])
+                boton.place(x=contadorx,y=contadory)
+                contadory += 30
+                listamarcasDiponibles += [i]
+                if contadory >= 750:
+                    contadory = 150
+                    contadorx += 50
+    codPasillo= Label(ventanaCm, text="Seleccione la marca")
+    codPasillo.place(x=20, y=40)
+    
+    combo = ttk.Combobox(ventanaCm,values=listamarcasDiponibles,state="readonly")
+    combo.place(x=20, y=60)
+    
+    Aceptar=Button(ventanaCm,text="Aceptar",command= lambda:FinalizarCompra(pasillo,producto,combo.get()))
+    Aceptar.place(x=20,y=80)
+
+    
+    Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
+    Regresar.place(x=620,y=650)
+    finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+    finalizarCompra.place(x=20,y=650)
+    
+    ventanaCm.mainloop()
+    
+    
+def FinalizarCompra(pasillo,producto,marca):
+    ventanaCm=  Toplevel()
+    info = marca.split(" ")
+    marca = marca.split(" ")[2]
+    
+    ventanaCm.geometry("700x700")
+    ventanaCm.config(bg="sky blue")
+    ventanaCm.title("Marcas")
+
+    
+    codPasillo= Label(ventanaCm, text="Seleccione la cantidad")
+    codPasillo.place(x=20, y=40)
+    precio= Label(ventanaCm, text="Cada unidad cuesta = "+ info[5])
+    precio.place(x=20, y=60)
+    spin_temp = ttk.Spinbox(ventanaCm,from_=0, to=int(info[4]),state="readonly")
+    spin_temp.place(x=20, y=80, width=70)
+    
+    Aceptar=Button(ventanaCm,text="Aceptar",command= lambda:comprando(pasillo,producto,marca,spin_temp.get()))
+    Aceptar.place(x=20,y=100)
+
+    
+    Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
+    Regresar.place(x=620,y=650)
+    
+    finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+    finalizarCompra.place(x=20,y=650)
+    
+    ventanaCm.mainloop()
 
 
 
@@ -1284,8 +1416,10 @@ def verificaAdministrador(codigo):#Hace la verifiacion del codigo de administrad
             #Regresa mensaje de error
         
 def verificaCliente(codigo1):#Hace la verifiacion del codigo de cliente
+        global cedulaActual
         CC=codigo1.get()
         if buscaEnLista(clientes,CC,0) != -1:
+            cedulaActual = CC
             ventanaClienR()
         else:
             ventanaClienNR()
