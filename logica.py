@@ -1195,12 +1195,33 @@ def ventanaComprar():
     ventanaCm.config(bg="sky blue")
     ventanaCm.title("Comprar")
 
-    opcion1=Button(ventanaCm, text="Pasillo")
+    opcion1=Button(ventanaCm, text="Pasillo", command= lambda:CargarProductospasillo(pasillos))
     opcion1.place(x=20,y=10)
 
+##    codPasillo= Label(ventanaCm, text="Ingrese el cod del Pasillo")
+##    codPasillo.place(x=20, y=40)
+##    cajapasillo = Entry(ventanaCm) #Caja de texto donde almacena/captura lo que el usuario ingresa
+##    cajapasillo.place(x=20, y=60)
+##    codProducto=Label(ventanaCm, text="Ingrese el cod del Producto")
+##    codProducto.place(x=20, y=80)
+##    cajaProducto= Entry(ventanaCm)
+##    cajaProducto.place(x=20,y=100)
+##    codMarca=Label(ventanaCm,text="Ingrese el cod de Marca")
+##    codMarca.place(x=20,y=120)
+##    cajamarca=Entry(ventanaCm)
+##    cajamarca.place(x=20,y=140)
+##    cantidadComprar=Label(ventanaCm, text="Digite la cantidad que desea comprar")
+##    cantidadComprar.place(x=20, y=160)
+##    cajacantidad=Entry(ventanaCm)
+##    cajacantidad.place(x=20,y=180)
+##    botonAceptar = Button(ventanaCm, text="Aceptar", command=lambda:comprando(cajapasillo,cajaproducto,cajamarca,cajacantidad))
+##    botonAceptar.place(x=250, y=250)
     Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
-
-
+    Regresar.place(x=280,y=280)
+    #cargar las imagenes
+    imagen1=PhotoImage(file="arroz.png")
+    lbl_imagen1=Label(ventanaCm, image=imagen1).place(x=100,y=100)
+    lbl_imagen1.pack()
 
 
 
