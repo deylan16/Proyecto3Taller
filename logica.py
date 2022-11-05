@@ -4,7 +4,7 @@ from LectorDeArchivos import *
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-
+##
 #Variables con la informacion de los archivos
 pasillos = CargarPasillos()
 productosPasillo = CargarProductospasillo(pasillos)
