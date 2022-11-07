@@ -1057,6 +1057,19 @@ def ventanaModificar():
     Regresar = Button(ventanaMod,text="Regresar", command = lambda:salirVentana(ventanaMod))
     Regresar.place(x=20,y=290)
 
+def mensajeDescuento():
+    
+    if descuento(cedulaActual):
+        messagebox.showinfo("Descuento","Si tiene descuento de un" + str(ConsultarDescuento()[1])+"%")
+    else:
+        messagebox.showinfo("Descuento","No tiene descuento son requeridas "+ str( ConsultarDescuento()[0])+ " facturas")
+consultado = False                                
+def consultarProductos2():
+    global consultado
+    consultado = True
+    ventanaComprar()
+    
+
 def ventanaManteB():
     ventanaMB = Toplevel()
     ventanaMB.geometry("340x340")
@@ -1176,13 +1189,13 @@ def ventanaClienR():
     opcion1 = Button(ventanaCr , text="Consultar Precio")
     opcion1.place(x=20,y=10)
 
-    opcion2 = Button(ventanaCr , text="Consultar Descuento")
+    opcion2 = Button(ventanaCr , text="Consultar Descuento",command=lambda:mensajeDescuento())
     opcion2.place(x=20,y=50)
 
-    opcion3 = Button(ventanaCr, text="Consultar Productos")
+    opcion3 = Button(ventanaCr, text="Consultar Productos",command=lambda:consultarProductos2())
     opcion3.place(x=20,y=90)
 
-    opcion4 = Button(ventanaCr , text="Comprar",command= lambda:ventanaComprar())
+    opcion4 = Button(ventanaCr , text="Comprar",command= lambda:antesComprar())
     opcion4.place(x=20,y=130)
 
     Regresar = Button(ventanaCr,text="Regresar", command = lambda:salirVentana(ventanaCr))
@@ -1199,6 +1212,11 @@ def ventanaClienR():
     
     #lbl_imagen1.place(x=100,y=100)
 botones = []
+def antesComprar():
+    global consultado
+    consultado = False
+    ventanaComprar()
+    
 def ventanaComprar():
     global botones
     ventanaCm=  Toplevel()
@@ -1233,9 +1251,9 @@ def ventanaComprar():
     
     #for i in botones:
     #    i.config( command= lambda:ventanaProductos(i))
-    
-    finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
-    finalizarCompra.place(x=20,y=650)
+    if(not(consultado)):
+        finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+        finalizarCompra.place(x=20,y=650)
     
     Regresar=Button(ventanaCm,text="Regresar", command= lambda:ventanaProductos(ventanaCm))
     Regresar.place(x=620,y=650)
@@ -1538,8 +1556,9 @@ def ventanaProductos(pasillo):
     
     Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
     Regresar.place(x=620,y=650)
-    finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
-    finalizarCompra.place(x=20,y=650)
+    if(not(consultado)):
+        finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+        finalizarCompra.place(x=20,y=650)
     
     ventanaCm.mainloop()    
 
@@ -1576,8 +1595,9 @@ def ventanaMarcas(pasillo,producto):
     
     Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
     Regresar.place(x=620,y=650)
-    finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
-    finalizarCompra.place(x=20,y=650)
+    if(not(consultado)):
+        finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+        finalizarCompra.place(x=20,y=650)
     
     ventanaCm.mainloop()
     
@@ -1592,22 +1612,26 @@ def FinalizarCompra(pasillo,producto,marca):
     ventanaCm.title("Marcas")
 
     
-    codPasillo= Label(ventanaCm, text="Seleccione la cantidad")
-    codPasillo.place(x=20, y=40)
+    
     precio= Label(ventanaCm, text="Cada unidad cuesta = "+ info[5])
     precio.place(x=20, y=60)
-    spin_temp = ttk.Spinbox(ventanaCm,from_=0, to=int(info[4]),state="readonly")
-    spin_temp.place(x=20, y=80, width=70)
     
-    Aceptar=Button(ventanaCm,text="Aceptar",command= lambda:comprando(pasillo,producto,marca,spin_temp.get()))
-    Aceptar.place(x=20,y=100)
-
+    
+    
+    if(not(consultado)):
+        codPasillo= Label(ventanaCm, text="Seleccione la cantidad")
+        codPasillo.place(x=20, y=40)
+        spin_temp = ttk.Spinbox(ventanaCm,from_=0, to=int(info[4]),state="readonly")
+        spin_temp.place(x=20, y=80, width=70)
+        Aceptar=Button(ventanaCm,text="Aceptar",command= lambda:comprando(pasillo,producto,marca,spin_temp.get()))
+        Aceptar.place(x=20,y=100)
+        finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+        finalizarCompra.place(x=20,y=650)
     
     Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
     Regresar.place(x=620,y=650)
     
-    finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
-    finalizarCompra.place(x=20,y=650)
+    
     
     ventanaCm.mainloop()
 
@@ -1677,7 +1701,16 @@ def verificaCliente(codigo1):#Hace la verifiacion del codigo de cliente
             ventanaClienR()
         else:
             ventanaClienNR()
-    
+
+
+def verificaVendedor(codigo1):#Hace la verifiacion del codigo de vendedor
+        global cedulaActual
+        CC=codigo1.get()
+        if buscaEnLista(Vendedores,CC,0) != -1:
+            cedulaActual = CC
+            ventanaVende()
+        else:
+            return messagebox.showinfo("Error en el codigo de vendedor","El Codigo ingresado no existe")
 ######################################################
 
 def salirVentana(ventana):#Sale de la ventana
@@ -1712,7 +1745,21 @@ def ventanaVC():
     botonAceptar.place(x=250, y=250)
     botonRegresar = Button(ventanaVC, text="Regresar", command=lambda:salirVentana(ventanaVC))
     botonRegresar.place(x=340, y=250)
-            
+
+def ventanaVV():
+    ventanaVV= Toplevel() #Crea otra ventana aparte de la principal para verificar vendedor
+    ventanaVV.geometry("400x300")
+    ventanaVV.title("Vendedor")
+
+    codV= Label(ventanaVV, text="ingrese el cod vendedor")
+    codV.place(x=30, y=10)
+    cajaV = Entry(ventanaVV) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajaV.place(x=220, y=10)
+    
+    botonAceptar = Button(ventanaVV, text="Aceptar", command=lambda:verificaVendedor(cajaV))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaVV, text="Regresar", command=lambda:salirVentana(ventanaVV))
+    botonRegresar.place(x=340, y=250)         
 
 
 
@@ -1727,7 +1774,7 @@ adminbttn.place(x=20,y=10)
 clientebttn = Button(menu,text="Cliente",command = lambda:ventanaVC())#Boton Cliente
 clientebttn.place(x=20,y=50)
 
-vendedorbttn = Button(menu,text="Vendedor",command = lambda:ventanaVende())#Boton vendedor
+vendedorbttn = Button(menu,text="Vendedor",command = lambda:ventanaVV())#Boton vendedor
 vendedorbttn.place(x=20,y=90)
 
 salirbttn = Button(menu,text="Salir", command = lambda:salirVentana(menu))#Boton para salir del menu
