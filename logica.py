@@ -947,14 +947,14 @@ def PromedioPreciosDeUnProducto():
             result += [i,suma/len(productos)]
         else:
             result += [i,0]
-    return messagebox.showinfo("Promedio precios",result)
+    return result
         
 
 
 
 #########################
 #comprar
-CedulaClienteActual = "1234567";   
+cedulaActual = ""
 productoscomprados = []
 
 #agrega producto al carrito
@@ -1016,7 +1016,9 @@ def EliminarProductoCarrito(CodPasillo,CodProducto,CodMarca):
 #agrega carrito a facturar  
 #Retorna -1 si no se ha comprado nada  
 def Comprar(cedula):
+    
     global registroTienda,productoscomprados
+    print(productoscomprados)
     if productoscomprados == []:
         return -1
     else:
@@ -2068,17 +2070,457 @@ def ventanaClienR():
     opcion1 = Button(ventanaCr , text="Consultar Precio")
     opcion1.place(x=20,y=10)
 
-    opcion2 = Button(ventanaCr , text="Consultar Descuento")
+    opcion2 = Button(ventanaCr , text="Consultar Descuento",command=lambda:mensajeDescuento())
     opcion2.place(x=20,y=50)
 
-    opcion3 = Button(ventanaCr, text="Consultar Productos")
+    opcion3 = Button(ventanaCr, text="Consultar Productos",command=lambda:consultarProductos2())
     opcion3.place(x=20,y=90)
 
-    opcion4 = Button(ventanaCr , text="Comprar")
+    opcion4 = Button(ventanaCr , text="Comprar",command= lambda:antesComprar())
     opcion4.place(x=20,y=130)
 
     Regresar = Button(ventanaCr,text="Regresar", command = lambda:salirVentana(ventanaCr))
     Regresar.place(x=20,y=170)
+
+
+#---------------------------------------------Ventana de Comprar-----------------------------------------------------------
+
+
+#cargar las imagenes
+    #imagen1=PhotoImage(file="imagenes del proyecto/arroz.png")
+    #imagen_sub=imagen1.subsample(3)
+    #lbl_imagen1=Label(ventanaCm, image=imagen_sub).place(x=100,y=100)
+    
+    #lbl_imagen1.place(x=100,y=100)
+botones = []
+def antesComprar():
+    global consultado
+    consultado = False
+    ventanaComprar()
+    
+def ventanaComprar():
+    global botones
+    ventanaCm=  Toplevel()
+    
+    ventanaCm.geometry("700x700")
+    ventanaCm.config(bg="sky blue")
+    ventanaCm.title("Comprar")
+
+    contadorx = 0
+    contadory = 150
+    contador = 0
+    for i in pasillos:
+        
+        boton = Button(ventanaCm, text=i[0]+":"+i[1])
+        boton.place(x=contadorx,y=contadory)
+        botones += [boton]
+        
+        
+        contadory += 30
+        if contadory >= 750:
+            contadory = 150
+            contadorx += 50
+        contador+= 1
+    codPasillo= Label(ventanaCm, text="Seleccione el pasillo")
+    codPasillo.place(x=20, y=40)
+    
+    combo = ttk.Combobox(ventanaCm,values=pasillos,state="readonly")
+    combo.place(x=20, y=60)
+    
+    Aceptar=Button(ventanaCm,text="Aceptar", command= lambda:ventanaProductos(combo.get()))
+    Aceptar.place(x=20,y=80)
+    
+    #for i in botones:
+    #    i.config( command= lambda:ventanaProductos(i))
+    if(not(consultado)):
+        finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+        finalizarCompra.place(x=20,y=650)
+    
+    Regresar=Button(ventanaCm,text="Regresar", command= lambda:ventanaProductos(ventanaCm))
+    Regresar.place(x=620,y=650)
+    
+    ventanaCm.mainloop()
+    
+def ventanaProductos(pasillo):
+    
+    print("***")
+    pasillo = pasillo.split(" ")[0]
+    print(pasillo)
+    ventanaCm=  Toplevel()
+    
+    ventanaCm.geometry("700x700")
+    ventanaCm.config(bg="sky blue")
+    ventanaCm.title("Productos")
+
+    contadorx = 10
+    contadory = 150
+    listaProductosdisponles = []
+    for i in productosPasillo:
+        
+        if i[0] == pasillo:
+            print("imagenes del proyecto/"+i[2]+".png")
+            
+            if (i[2] == "Arroz"):
+                imagen1=PhotoImage(file="imagenes del proyecto/"+"Arroz"+".png")
+                imagen_sub=imagen1.subsample(3)    
+            
+                boton = Button(ventanaCm, text=i[2],image=imagen_sub)
+                boton.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Frijoles"):
+                imagen2=PhotoImage(file="imagenes del proyecto/"+"Frijoles"+".png")
+                imagen_sub2=imagen2.subsample(3)    
+            
+                boton2 = Button(ventanaCm, text=i[2],image=imagen_sub2)
+                boton2.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Cloro"):
+                imagen3=PhotoImage(file="imagenes del proyecto/"+"Cloro"+".png")
+                imagen_sub3=imagen3.subsample(3)    
+            
+                boton3 = Button(ventanaCm, text=i[2],image=imagen_sub3)
+                boton3.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Jugos"):
+                imagen4=PhotoImage(file="imagenes del proyecto/"+"Jugos"+".png")
+                imagen_sub4=imagen4.subsample(3)    
+            
+                boton4 = Button(ventanaCm, text=i[2],image=imagen_sub4)
+                boton4.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Jamones"):
+                imagen5=PhotoImage(file="imagenes del proyecto/"+"Jamones"+".png")
+                imagen_sub5=imagen5.subsample(3)    
+            
+                boton5 = Button(ventanaCm, text=i[2],image=imagen_sub5)
+                boton5.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Sal"):
+                imagen6=PhotoImage(file="imagenes del proyecto/"+"Sal"+".png")
+                imagen_sub6=imagen6.subsample(3)    
+            
+                boton6 = Button(ventanaCm, text=i[2],image=imagen_sub6)
+                boton6.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Huevos"):
+                imagen7=PhotoImage(file="imagenes del proyecto/"+"Huevos"+".png")
+                imagen_sub7=imagen7.subsample(3)    
+            
+                boton7 = Button(ventanaCm, text=i[2],image=imagen_sub7)
+                boton7.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Leche"):
+                imagen8=PhotoImage(file="imagenes del proyecto/"+"Leche"+".png")
+                imagen_sub8=imagen8.subsample(3)    
+            
+                boton8 = Button(ventanaCm, text=i[2],image=imagen_sub8)
+                boton8.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Queso"):
+                imagen9=PhotoImage(file="imagenes del proyecto/"+"Queso"+".png")
+                imagen_sub9=imagen9.subsample(3)    
+            
+                boton9 = Button(ventanaCm, text=i[2],image=imagen_sub9)
+                boton9.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Cereal"):
+                imagen10=PhotoImage(file="imagenes del proyecto/"+"Cereal"+".png")
+                imagen_sub10=imagen10.subsample(3)    
+            
+                boton10 = Button(ventanaCm, text=i[2],image=imagen_sub10)
+                boton10.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Pan"):
+                imagen11=PhotoImage(file="imagenes del proyecto/"+"Pan"+".png")
+                imagen_sub11=imagen11.subsample(3)    
+            
+                boton11 = Button(ventanaCm, text=i[2],image=imagen_sub11)
+                boton11.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Zanahorias"):
+                imagen12=PhotoImage(file="imagenes del proyecto/"+"Zanahorias"+".png")
+                imagen_sub12=imagen12.subsample(3)    
+            
+                boton12 = Button(ventanaCm, text=i[2],image=imagen_sub12)
+                boton12.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Bananos"):
+                imagen13=PhotoImage(file="imagenes del proyecto/"+"Bananos"+".png")
+                imagen_sub13=imagen13.subsample(3)    
+            
+                boton13 = Button(ventanaCm, text=i[2],image=imagen_sub13)
+                boton13.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Repollo"):
+                imagen14=PhotoImage(file="imagenes del proyecto/"+"Repollo"+".png")
+                imagen_sub14=imagen14.subsample(3)    
+            
+                boton14 = Button(ventanaCm, text=i[2],image=imagen_sub14)
+                boton14.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Chile"):
+                imagen15=PhotoImage(file="imagenes del proyecto/"+"Chile"+".png")
+                imagen_sub15=imagen15.subsample(3)    
+            
+                boton15 = Button(ventanaCm, text=i[2],image=imagen_sub15)
+                boton15.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Desinfectante"):
+                imagen16=PhotoImage(file="imagenes del proyecto/"+"Desinfectante"+".png")
+                imagen_sub16=imagen16.subsample(3)    
+            
+                boton16 = Button(ventanaCm, text=i[2],image=imagen_sub16)
+                boton16.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Gaseosas"):
+                imagen17=PhotoImage(file="imagenes del proyecto/"+"Gaseosas"+".png")
+                imagen_sub17=imagen17.subsample(3)    
+            
+                boton17 = Button(ventanaCm, text=i[2],image=imagen_sub17)
+                boton17.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Chuleta"):
+                imagen18=PhotoImage(file="imagenes del proyecto/"+"Chuleta"+".png")
+                imagen_sub18=imagen18.subsample(3)    
+            
+                boton18 = Button(ventanaCm, text=i[2],image=imagen_sub18)
+                boton18.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Bistec"):
+                imagen19=PhotoImage(file="imagenes del proyecto/"+"Bistec"+".png")
+                imagen_sub19=imagen19.subsample(3)    
+            
+                boton19 = Button(ventanaCm, text=i[2],image=imagen_sub19)
+                boton19.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Muslos"):
+                imagen20=PhotoImage(file="imagenes del proyecto/"+"Muslos"+".png")
+                imagen_sub20=imagen20.subsample(3)    
+            
+                boton20 = Button(ventanaCm, text=i[2],image=imagen_sub20)
+                boton20.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Picaña"):
+                imagen21=PhotoImage(file="imagenes del proyecto/"+"Picaña"+".png")
+                imagen_sub21=imagen21.subsample(3)    
+            
+                boton21 = Button(ventanaCm, text=i[2],image=imagen_sub21)
+                boton21.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Salchichas"):
+                imagen22=PhotoImage(file="imagenes del proyecto/"+"Salchichas"+".png")
+                imagen_sub22=imagen22.subsample(3)    
+            
+                boton22 = Button(ventanaCm, text=i[2],image=imagen_sub22)
+                boton22.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Comida de perro"):
+                imagen23=PhotoImage(file="imagenes del proyecto/"+"Comida de perro"+".png")
+                imagen_sub23=imagen23.subsample(3)    
+            
+                boton23 = Button(ventanaCm, text=i[2],image=imagen_sub23)
+                boton23.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Pañales"):
+                imagen24=PhotoImage(file="imagenes del proyecto/"+"Pañales"+".png")
+                imagen_sub24=imagen24.subsample(3)    
+            
+                boton24 = Button(ventanaCm, text=i[2],image=imagen_sub24)
+                boton24.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Paños"):
+                imagen25=PhotoImage(file="imagenes del proyecto/"+"Paños"+".png")
+                imagen_sub25=imagen25.subsample(3)    
+            
+                boton25 = Button(ventanaCm, text=i[2],image=imagen_sub25)
+                boton25.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Pasta de dientes"):
+                imagen26=PhotoImage(file="imagenes del proyecto/"+"Pasta de dientes"+".png")
+                imagen_sub26=imagen26.subsample(3)    
+            
+                boton26 = Button(ventanaCm, text=i[2],image=imagen_sub26)
+                boton26.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Shampoo"):
+                imagen27=PhotoImage(file="imagenes del proyecto/"+"Shampoo"+".png")
+                imagen_sub27=imagen27.subsample(3)    
+            
+                boton27 = Button(ventanaCm, text=i[2],image=imagen_sub27)
+                boton27.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Helado"):
+                imagen28=PhotoImage(file="imagenes del proyecto/"+"Helado"+".png")
+                imagen_sub28=imagen28.subsample(3)    
+            
+                boton28 = Button(ventanaCm, text=i[2],image=imagen_sub28)
+                boton28.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Salmon"):
+                imagen29=PhotoImage(file="imagenes del proyecto/"+"Salmon"+".png")
+                imagen_sub29=imagen29.subsample(3)    
+            
+                boton29 = Button(ventanaCm, text=i[2],image=imagen_sub29)
+                boton29.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Manzanas"):
+                imagen30=PhotoImage(file="imagenes del proyecto/"+"Manzanas"+".png")
+                imagen_sub30=imagen30.subsample(3)    
+            
+                boton30 = Button(ventanaCm, text=i[2],image=imagen_sub30)
+                boton30.place(x=contadorx,y=contadory)
+            elif (i[2] == "Yogurt"):
+                imagen31=PhotoImage(file="imagenes del proyecto/"+"Yogurt"+".png")
+                imagen_sub31=imagen31.subsample(3)    
+            
+                boton31 = Button(ventanaCm, text=i[2],image=imagen_sub31)
+                boton31.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Blusas"):
+                imagen32=PhotoImage(file="imagenes del proyecto/"+"Blusas"+".png")
+                imagen_sub32=imagen32.subsample(3)    
+            
+                boton32 = Button(ventanaCm, text=i[2],image=imagen_sub32)
+                boton32.place(x=contadorx,y=contadory)
+           
+            elif (i[2] == "Camisas"):
+                imagen33=PhotoImage(file="imagenes del proyecto/"+"Camisas"+".png")
+                imagen_sub33=imagen33.subsample(3)    
+            
+                boton33 = Button(ventanaCm, text=i[2],image=imagen_sub33)
+                boton33.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Pesas"):
+                imagen34=PhotoImage(file="imagenes del proyecto/"+"Pesas"+".png")
+                imagen_sub34=imagen34.subsample(3)    
+            
+                boton34 = Button(ventanaCm, text=i[2],image=imagen_sub34)
+                boton34.place(x=contadorx,y=contadory)
+
+            elif (i[2] == "Carritos"):
+                imagen35=PhotoImage(file="imagenes del proyecto/"+"Carritos"+".png")
+                imagen_sub35=imagen35.subsample(3)    
+            
+                boton35 = Button(ventanaCm, text=i[2],image=imagen_sub35)
+                boton35.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Muñecas"):
+                imagen36=PhotoImage(file="imagenes del proyecto/"+"Muñecas"+".png")
+                imagen_sub36=imagen36.subsample(3)    
+            
+                boton36 = Button(ventanaCm, text=i[2],image=imagen_sub36)
+                boton36.place(x=contadorx,y=contadory)
+            
+            elif (i[2] == "Comida de gato"):
+                imagen37=PhotoImage(file="imagenes del proyecto/"+"Comida de gato"+".png")
+                imagen_sub37=imagen37.subsample(3)    
+            
+                boton37 = Button(ventanaCm, text=i[2],image=imagen_sub37)
+                boton37.place(x=contadorx,y=contadory)
+
+            contadory += 200
+            listaProductosdisponles += [i]
+            if contadory >= 750:
+                contadory = 150
+                contadorx += 50
+
+    
+    codPasillo= Label(ventanaCm, text="Seleccione el producto")
+    codPasillo.place(x=20, y=40)
+    
+    combo = ttk.Combobox(ventanaCm,values=listaProductosdisponles,state="readonly")
+    combo.place(x=20, y=60)
+    
+    Aceptar=Button(ventanaCm,text="Aceptar", command= lambda:ventanaMarcas(pasillo,combo.get()))
+    Aceptar.place(x=20,y=80)
+    
+    
+    Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
+    Regresar.place(x=620,y=650)
+    if(not(consultado)):
+        finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+        finalizarCompra.place(x=20,y=650)
+    
+    ventanaCm.mainloop()    
+
+def ventanaMarcas(pasillo,producto):
+    ventanaCm=  Toplevel()
+    producto = producto.split(" ")[1]
+    
+    ventanaCm.geometry("700x700")
+    ventanaCm.config(bg="sky blue")
+    ventanaCm.title("Marcas")
+
+    contadorx = 0
+    contadory = 150
+    listamarcasDiponibles = []
+    for i in marcasProductos:
+        if i[0] == pasillo:
+            if i[1] == producto:
+                boton = Button(ventanaCm, text=i[3])
+                boton.place(x=contadorx,y=contadory)
+                contadory += 30
+                listamarcasDiponibles += [i]
+                if contadory >= 750:
+                    contadory = 150
+                    contadorx += 50
+    codPasillo= Label(ventanaCm, text="Seleccione la marca")
+    codPasillo.place(x=20, y=40)
+    
+    combo = ttk.Combobox(ventanaCm,values=listamarcasDiponibles,state="readonly")
+    combo.place(x=20, y=60)
+    
+    Aceptar=Button(ventanaCm,text="Aceptar",command= lambda:FinalizarCompra(pasillo,producto,combo.get()))
+    Aceptar.place(x=20,y=80)
+
+    
+    Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
+    Regresar.place(x=620,y=650)
+    if(not(consultado)):
+        finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+        finalizarCompra.place(x=20,y=650)
+    
+    ventanaCm.mainloop()
+    
+    
+def FinalizarCompra(pasillo,producto,marca):
+    ventanaCm=  Toplevel()
+    info = marca.split(" ")
+    marca = marca.split(" ")[2]
+    
+    ventanaCm.geometry("700x700")
+    ventanaCm.config(bg="sky blue")
+    ventanaCm.title("Marcas")
+
+    
+    
+    precio= Label(ventanaCm, text="Cada unidad cuesta = "+ info[5])
+    precio.place(x=20, y=60)
+    
+    
+    
+    if(not(consultado)):
+        codPasillo= Label(ventanaCm, text="Seleccione la cantidad")
+        codPasillo.place(x=20, y=40)
+        spin_temp = ttk.Spinbox(ventanaCm,from_=0, to=int(info[4]),state="readonly")
+        spin_temp.place(x=20, y=80, width=70)
+        Aceptar=Button(ventanaCm,text="Aceptar",command= lambda:comprando(pasillo,producto,marca,spin_temp.get()))
+        Aceptar.place(x=20,y=100)
+        finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
+        finalizarCompra.place(x=20,y=650)
+    
+    Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
+    Regresar.place(x=620,y=650)
+    
+    
+    
+    ventanaCm.mainloop()
+
+
+
+
+
+
 
 def ventanaClienNR():
     ventanaCnr = Toplevel()
@@ -2133,12 +2575,23 @@ def verificaAdministrador(codigo):#Hace la verifiacion del codigo de administrad
             #Regresa mensaje de error
         
 def verificaCliente(codigo1):#Hace la verifiacion del codigo de cliente
+        global cedulaActual
         CC=codigo1.get()
         if buscaEnLista(clientes,CC,0) != -1:
+            cedulaActual = CC
             ventanaClienR()
         else:
             ventanaClienNR()
-    
+
+
+def verificaVendedor(codigo1):#Hace la verifiacion del codigo de vendedor
+        global cedulaActual
+        CC=codigo1.get()
+        if buscaEnLista(Vendedores,CC,0) != -1:
+            cedulaActual = CC
+            ventanaVende()
+        else:
+            return messagebox.showinfo("Error en el codigo de vendedor","El Codigo ingresado no existe")
 ######################################################
 
 def salirVentana(ventana):#Sale de la ventana
@@ -2173,7 +2626,21 @@ def ventanaVC():
     botonAceptar.place(x=250, y=250)
     botonRegresar = Button(ventanaVC, text="Regresar", command=lambda:salirVentana(ventanaVC))
     botonRegresar.place(x=340, y=250)
-            
+
+def ventanaVV():
+    ventanaVV= Toplevel() #Crea otra ventana aparte de la principal para verificar vendedor
+    ventanaVV.geometry("400x300")
+    ventanaVV.title("Vendedor")
+
+    codV= Label(ventanaVV, text="ingrese el cod vendedor")
+    codV.place(x=30, y=10)
+    cajaV = Entry(ventanaVV) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajaV.place(x=220, y=10)
+    
+    botonAceptar = Button(ventanaVV, text="Aceptar", command=lambda:verificaVendedor(cajaV))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaVV, text="Regresar", command=lambda:salirVentana(ventanaVV))
+    botonRegresar.place(x=340, y=250)         
 
 
 
@@ -2188,13 +2655,10 @@ adminbttn.place(x=20,y=10)
 clientebttn = Button(menu,text="Cliente",command = lambda:ventanaVC())#Boton Cliente
 clientebttn.place(x=20,y=50)
 
-vendedorbttn = Button(menu,text="Vendedor",command = lambda:ventanaVende())#Boton vendedor
+vendedorbttn = Button(menu,text="Vendedor",command = lambda:ventanaVV())#Boton vendedor
 vendedorbttn.place(x=20,y=90)
 
 salirbttn = Button(menu,text="Salir", command = lambda:salirVentana(menu))#Boton para salir del menu
 salirbttn.place(x=20,y=250)
 
 menu.mainloop()
-
-
-
