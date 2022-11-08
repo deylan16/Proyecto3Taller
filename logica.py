@@ -258,8 +258,8 @@ def InsertarInventario(CodPasillo,CodProducto,CodMarca,Nombre,CantidadStock,Codi
     else:
         nuevaMarca = [CDP,CPR,CDM,Nom,Cant,Codc]
         inventarios += [nuevaMarca]
-        ultimo = [CDP,CPR,CDM]
-        ultimosDosProductosInsertado += ultimo
+        ultimo = [CDP,CPR,CDM,Nom]
+        ultimosDosProductosInsertado += [ultimo]
         if len(ultimosDosProductosInsertado) > 2:
             ultimosDosProductosInsertado = ultimosDosProductosInsertado[-2]
         ventanaInMod()
