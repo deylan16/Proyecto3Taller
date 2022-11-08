@@ -1446,38 +1446,6 @@ def ventanaRepProductospasillomásvendidos():
     botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
     botonRegresar.place(x=340, y=250)
 
-def ventanaRepProductosPasillo():
-    ventanaMP= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
-    ventanaMP.geometry("400x300")
-    ventanaMP.title("Rep Productos de un Pasillo")
-
-    codpasillo= Label(ventanaMP, text="Ingrese el cod del pasillo")
-    codpasillo.place(x=30, y=10)
-    cajapasillo = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
-    cajapasillo.place(x=230, y=10)
-    
-    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda: ProductosDeUnPasillo(cajapasillo))
-    botonAceptar.place(x=250, y=250)
-    botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
-    botonRegresar.place(x=340, y=250)
-
-def ventanaRepMarcasProductos():
-    ventanaMP= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
-    ventanaMP.geometry("400x300")
-    ventanaMP.title("Rep Marcas de un Producto ")
-
-    codprod= Label(ventanaMP, text="Ingrese el cod del producto")
-    codprod.place(x=30, y=10)
-    cajaprod = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
-    cajaprod.place(x=230, y=10)
-    
-    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda: MarcasDeUnProducto(cajaprod))
-    botonAceptar.place(x=250, y=250)
-    botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
-    botonRegresar.place(x=340, y=250)
-
-
-
 #---------------------------Ventana de Modificar-------------------------------
 def ventanaModificarP():
     ventanaMP= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
@@ -2210,13 +2178,13 @@ def ventanaReportes():
     opcion8 = Button(ventanaRep , text="Cliente que más facturo", command = lambda:ClienteQueMasFacturo())
     opcion8.place(x=20,y=290)
 
-    opcion9 = Button(ventanaRep , text="Marcas de un producto", command = lambda:MarcasDeUnProducto(CodProducto))
+    opcion9 = Button(ventanaRep , text="Marcas de un producto", command = lambda:ventanaRepMarcasProductos()
     opcion9.place(x=20,y=330)
 
     opcion10 = Button(ventanaRep , text="Factura de mayor monto", command = lambda:FacturaDeMayorMonto())
     opcion10.place(x=20,y=370)
     
-    opcion11 = Button(ventanaRep , text="Productos de un pasillo", command = lambda:ProductosDeUnPasillo(CodPasillo))
+    opcion11 = Button(ventanaRep , text="Productos de un pasillo", command = lambda:ventanaRepProductosPasillo())
     opcion11.place(x=20,y=410)
 
     opcion12 = Button(ventanaRep , text="Clientes del supermercado", command = lambda:ClientesDelSupermercado())
