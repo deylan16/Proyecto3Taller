@@ -1168,7 +1168,17 @@ def ventanaVMod():
 
 
 #---------------------------Ventana Mostrar Info Final Modicar-------------------------------   
+def mensajeDescuento():
     
+    if descuento(cedulaActual):
+        messagebox.showinfo("Descuento","Si tiene descuento de un" + str(ConsultarDescuento()[1])+"%")
+    else:
+        messagebox.showinfo("Descuento","No tiene descuento son requeridas "+ str( ConsultarDescuento()[0])+ " facturas")
+consultado = False                                
+def consultarProductos2():
+    global consultado
+    consultado = True
+    ventanaComprar()   
 def ventanaRepClientes():
     ventanaRepC = Toplevel() #Crea otra ventana aparte de la principal
     ventanaRepC.geometry("700x700")
@@ -1620,7 +1630,7 @@ def ventanaInsertCli():
     cajacorr = Entry(ventanaC) #Caja de texto donde almacena/captura lo que el usuario ingresa
     cajacorr.place(x=250, y=130)
     
-    botonAceptar = Button(ventanaC, text="Aceptar", command=lambda: InsertarClientes(cajaced,cajanom,cajatele,cajacorr))
+    botonAceptar = Button(ventanaC, text="Aceptar", command=lambda: RegistrarClientes(cajaced,cajanom,cajatele,cajacorr))
     botonAceptar.place(x=250, y=250)
     botonRegresar = Button(ventanaC, text="Regresar", command=lambda:salirVentana(ventanaC))
     botonRegresar.place(x=340, y=250)
