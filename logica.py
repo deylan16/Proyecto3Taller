@@ -13,6 +13,9 @@ inventarios = CargarInventario()
 clientes = CargarClientes()
 Administradores =  CargarAdministradores()
 Vendedores = CargarVendedores()
+print(marcasProductos)
+print(inventarios)
+
 #######################
 ######para reportes######
 registroTienda = []
@@ -1230,7 +1233,7 @@ def ventanaRevisarGondolas():
     ventanaMarM.geometry("700x700")
 
     listamarca = marcasProductos #Devuelve la lista de Clientes, llama la función
-    total_Filas = len(listamarca)-1 #Num de filas
+    total_Filas = len(listamarca) #Num de filas
     total_Columnas = len(listamarca[0]) #Num columnas
 
     #---Crear la tabla------
@@ -1305,7 +1308,7 @@ def ventanaProductosMod():
     ventanaProM.geometry("700x700")
 
     listaproductos = productosPasillo #Devuelve la lista de Clientes, llama la función
-    total_Filas = len(listaproductos)-1 #Num de filas
+    total_Filas = len(listaproductos) #Num de filas
     total_Columnas = len(listaproductos[0]) #Num columnas
 
     #---Crear la tabla------
@@ -1324,7 +1327,7 @@ def ventanaMarcaMod():
     ventanaMarM.geometry("700x700")
 
     listamarca = marcasProductos #Devuelve la lista de Clientes, llama la función
-    total_Filas = len(listamarca)-1 #Num de filas
+    total_Filas = len(listamarca) #Num de filas
     total_Columnas = len(listamarca[0]) #Num columnas
 
     #---Crear la tabla------
@@ -1343,7 +1346,7 @@ def ventanaInMod():
     ventanaInM.geometry("700x700")
 
     listainve = inventarios #Devuelve la lista de Clientes, llama la función
-    total_Filas = len(listainve)-1 #Num de filas
+    total_Filas = len(listainve)#Num de filas
     total_Columnas = len(listainve[0]) #Num columnas
 
     #---Crear la tabla------
@@ -1362,7 +1365,7 @@ def ventanaCMod():
     ventanaCM.geometry("700x700")
 
     listaC = clientes #Devuelve la lista de Clientes, llama la función
-    total_Filas = len(listaC)-1 #Num de filas
+    total_Filas = len(listaC)#Num de filas
     total_Columnas = len(listaC[0]) #Num columnas
 
     #---Crear la tabla------
@@ -1449,9 +1452,9 @@ def ventanaRepClientes():
 def ventanaRepInventario():
     ventanaInM = Toplevel() #Crea otra ventana aparte de la principal
     ventanaInM.geometry("700x700")
-
+    print(inventarios)
     listainve = inventarios #Devuelve la lista de Clientes, llama la función
-    total_Filas = len(listainve)-1 #Num de filas
+    total_Filas = len(listainve) #Num de filas
     total_Columnas = len(listainve[0]) #Num columnas
 
     #---Crear la tabla------
