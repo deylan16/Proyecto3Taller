@@ -278,6 +278,19 @@ def RegistrarClientes(Cedula,Nombre,Telefono,Correo):
         nuevoCliente = [Ced,Nom,Tel,Cor]
         clientes += [nuevoCliente]
         ventanaCMod()
+def verificar_inventario(CodMarca,Cantidad):
+    global inventarios
+    Cod=CodMarca.get()
+    Cant=Cantidad.get()
+    for i in range(len(inventarios)):
+         if inventarios[i][2]==Cod:
+             if int(inventarios[i][4])<20: 
+                 suma=(inventarios[i][4])+Cant
+                 inventarios[i][4]=suma
+                 return messagebox.showinfo("En el inventario ahora hay",inventarios[i][3:5])
+             else:
+                return messagebox.showinfo("Error en el codigo de pasillo","El Codigo ingresado no existe")
+
         
 #Retorna -1 si el codigo adminstrador existe
 #Retorna -2 el codigo adminstrador no es un numero      
@@ -835,6 +848,9 @@ def PasilloMenosVisitado():
 #3.Productos por pasillo mas vendido
 #Retorna -1 si no se ha facturador nada
 #Retorna -2 si no existe el pasillo
+#3.Productos por pasillo mas vendido
+#Retorna -1 si no se ha facturador nada
+#Retorna -2 si no existe el pasillo
 def ProductosPorPasilloMasVendido(CodPasillo):
     global pasillos
     Cod=CodPasillo.get()
@@ -843,7 +859,8 @@ def ProductosPorPasilloMasVendido(CodPasillo):
     elif buscaEnLista(pasillos,Cod,0)== -1:
         return messagebox.showinfo("Error en el reporte")
     else:
-        return messagebox.showinfo("Producto Pasillo mas vendido",(moda(Hagalista(PasilloProductosComprados,Cod,0))))
+        Info=(moda(Hagalista(PasilloProductosComprados,Cod,0)))
+        return messagebox.showinfo("Producto Pasillo mas vendido",Info)
         
 #4.Marcas mas vendidas
 #Retorna -1 si no se ha facturador nada
@@ -895,7 +912,8 @@ def MarcasDeUnProducto(CodProducto):
     elif buscaEnLista(productosPasillo,Cod,1)== -1:
          return messagebox.showinfo("Error en el reporte")
     else:
-        return messagebox.showinfo("Marcas de un producto",(Hagalista(marcasProductos,Cod,1)))
+        Info=Hagalista(marcasProductos,Cod,1)
+        return messagebox.showinfo("Marcas de un Producto",Info)
     
 #10.Factura de mayor monto
 #Retorna -1 si no se ha facturador nada
@@ -915,7 +933,8 @@ def ProductosDeUnPasillo(CodPasillo):
     if buscaEnLista(pasillos,Cod,0)== -1:
         return messagebox.showinfo("Error en el reporte")
     else:
-       return messagebox.showinfo("Productos de un pasillo",((Hagalista(productosPasillo,Cod,0))))
+        Info=((Hagalista(productosPasillo,Cod,0)))
+        return messagebox.showinfo("Productos de un pasillo",Info)
     
 #12.Clientes del supermercado
 def ClientesDelSupermercado():
@@ -1143,6 +1162,26 @@ def ventanaRevisarGondolas():
     botonRegresar.place(x=10, y=550)
     botonRegresar = Button(ventanaMarM, text="Regresar", command=lambda:salirVentana(ventanaMarM))
     botonRegresar.place(x=540, y=550)
+    
+def ventanaverificarinventario():
+    ventanaA= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
+    ventanaA.geometry("450x450")
+    ventanaA.title("Eliminar Administrador")
+
+    Codi= Label(ventanaA, text="Ingrese el codigo de la marca")
+    Codi.place(x=30, y=10)
+    cajacod = Entry(ventanaA) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajacod.place(x=250, y=10)
+
+    Canti= Label(ventanaA, text="Ingrese la cantidad")
+    Canti.place(x=30, y=50)
+    cajacant = Entry(ventanaA) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajacant.place(x=250, y=50)
+    
+    botonAceptar = Button(ventanaA, text="Aceptar", command=lambda: verificar_inventario(cajacod,cajacant))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaA, text="Regresar", command=lambda:salirVentana(ventanaA))
+    botonRegresar.place(x=340, y=250)
         
 #---------------------------Ventana Mostrar Info Final Modicar-------------------------------
 def ventanaPasillosMod():
