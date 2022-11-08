@@ -754,13 +754,17 @@ def facturar():
             productoComprando = facturando[1][i]
 
             pasillosComprados += [productoComprando[0]]
+            
             for j in range((int)(facturando[1][i][4])):
-                PasilloProductosComprados += [[productoComprando[0],productoComprando[3]]]
-            MarcasCompradas += [productoComprando[2]]
+                
+                n = Hagalista(productosPasillo,productoComprando[1],1)
+                
+                PasilloProductosComprados += [[productoComprando[0],n[0][2]]]
+                MarcasCompradas += [productoComprando[2]]
             
             
             #################
-            if (tiene13(facturando[1][i][2]) ):
+            if (not(tiene13(facturando[1][i][2])) ):
                 string += "+ 13% \t "
                 total = ((int)(facturando[1][i][4])*(int)(facturando[1][i][5]))* 1.13
                 string += (str)(total)
@@ -860,7 +864,11 @@ def ProductosPorPasilloMasVendido(CodPasillo):
     elif buscaEnLista(pasillos,Cod,0)== -1:
         return messagebox.showinfo("Error en el reporte")
     else:
-        Info=(moda(Hagalista(PasilloProductosComprados,Cod,0)))
+        n = Hagalista(PasilloProductosComprados,Cod,0)
+        lista = []
+        for i in n:
+            lista +=[i[1]]
+        Info=(moda(lista))
         return messagebox.showinfo("Producto Pasillo mas vendido",Info)
         
 #4.Marcas mas vendidas
@@ -954,8 +962,6 @@ def UltimosDosProductosInsertadosAlInventario():
     return messagebox.showinfo("UltimosDosProductos",ultimosDosProductosInsertado)
 
 #16.ultimoProductoModificado
-def ultimoProductoModificado():
-    return messagebox.showinfo("ultimoProductoModificado",ultimoProductoModificado)
 
 #17.PromedioPreciosDeUnProducto();
 def PromedioPreciosDeUnProducto():
@@ -966,17 +972,39 @@ def PromedioPreciosDeUnProducto():
             suma = 0
             for n in productos:
                 suma+= int(n[5])
-            result += [i,suma/len(productos)]
+            result += [i+[suma/len(productos)]]
         else:
             result += [i,0]
-    return result
+    string = ""
+    print(result)
+    for n in result:
+        if isinstance(n,list):
+            for j in n:
+                string += str(j)
+            string += "\n"
+    return messagebox.showinfo("promedios",string)
 
 def ventanaRepMarcasDeUnProducto():
+    ventanaMP= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
+    ventanaMP.geometry("400x300")
+    ventanaMP.title("Rep Productos Pasillo")
+
+    codpasillo= Label(ventanaMP, text="Ingrese el cod del producto")
+    codpasillo.place(x=30, y=10)
+    cajapasillo = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajapasillo.place(x=230, y=10)
+    
+    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda: ventanaRepMarcasDeUnProducto2(cajapasillo.get()))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
+    botonRegresar.place(x=340, y=250)
+    
+def ventanaRepMarcasDeUnProducto2(producto):
     ventanaPasM = Toplevel() #Crea otra ventana aparte de la principal
     ventanaPasM.geometry("700x700")
     global lista1
 
-    listaPasillos = lista1#Devuelve la lista de Clientes, llama la función
+    listaPasillos = Hagalista(marcasProductos,producto,1)
     total_Filas = len(listaPasillos) #Num de filas
     total_Columnas = len(listaPasillos[0]) #Num columnas
 
@@ -992,11 +1020,27 @@ def ventanaRepMarcasDeUnProducto():
     botonRegresar.place(x=340, y=250)
 
 def ventanaRepProductosDeUnPasillo():
+    ventanaMP= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
+    ventanaMP.geometry("400x300")
+    ventanaMP.title("Rep Productos Pasillo")
+
+    codpasillo= Label(ventanaMP, text="Ingrese el cod del pasillo")
+    codpasillo.place(x=30, y=10)
+    cajapasillo = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajapasillo.place(x=230, y=10)
+    
+    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda: ventanaRepProductosDeUnPasillo2(cajapasillo.get()))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
+    botonRegresar.place(x=340, y=250)
+def ventanaRepProductosDeUnPasillo2(pasillo2):
     ventanaPasM = Toplevel() #Crea otra ventana aparte de la principal
     ventanaPasM.geometry("700x700")
     global lista2
+    print(productoscomprados)
+    print(pasillo2)
 
-    listaPasillos = lista2#Devuelve la lista de Clientes, llama la función
+    listaPasillos = Hagalista(productosPasillo,pasillo2,0)
     total_Filas = len(listaPasillos) #Num de filas
     total_Columnas = len(listaPasillos[0]) #Num columnas
 
@@ -2148,6 +2192,13 @@ def ventanaManteB():
     Regresar = Button(ventanaMB,text="Regresar", command = lambda:salirVentana(ventanaMB))
     Regresar.place(x=20,y=250)
 
+def ventanaUltimoModificado():
+    if ultimoProductoModificado==[]:
+        return messagebox.showinfo("Error en el reporte","No se ha cambiado nada")
+    else:
+        return messagebox.showinfo("Ultimo modificado",ultimoProductoModificado)
+    
+    
 #---------------------------Ventana Reportes-------------------------------
 def ventanaReportes():
     ventanaRep = Toplevel()
@@ -2178,13 +2229,13 @@ def ventanaReportes():
     opcion8 = Button(ventanaRep , text="Cliente que más facturo", command = lambda:ClienteQueMasFacturo())
     opcion8.place(x=20,y=290)
 
-    opcion9 = Button(ventanaRep , text="Marcas de un producto", command = lambda:ventanaRepMarcasProductos()
+    opcion9 = Button(ventanaRep , text="Marcas de un producto", command = lambda:ventanaRepMarcasDeUnProducto())
     opcion9.place(x=20,y=330)
 
     opcion10 = Button(ventanaRep , text="Factura de mayor monto", command = lambda:FacturaDeMayorMonto())
     opcion10.place(x=20,y=370)
     
-    opcion11 = Button(ventanaRep , text="Productos de un pasillo", command = lambda:ventanaRepProductosPasillo())
+    opcion11 = Button(ventanaRep , text="Productos de un pasillo", command = lambda:ventanaRepProductosDeUnPasillo())
     opcion11.place(x=20,y=410)
 
     opcion12 = Button(ventanaRep , text="Clientes del supermercado", command = lambda:ClientesDelSupermercado())
@@ -2199,7 +2250,7 @@ def ventanaReportes():
     opcion15 = Button(ventanaRep , text="Últimos dos productos insertados al inventario", command = lambda:UltimosDosProductosInsertadosAlInventario())
     opcion15.place(x=20,y=570)
 
-    opcion16 = Button(ventanaRep , text="Ultimo Producto modificado", command = lambda:ultimoProductoModificado())
+    opcion16 = Button(ventanaRep , text="Ultimo Producto modificado", command = lambda:ventanaUltimoModificado())
     opcion16.place(x=20,y=610)
     
     opcion17 = Button(ventanaRep , text="Promedio de Precios de un producto", command = lambda:PromedioPreciosDeUnProducto())
@@ -2224,11 +2275,9 @@ def ventanaAdmin():
     opcion3 = Button(ventanaAd , text="Revisar gondolas",command= lambda:ventanaRevisarGondolas())
     opcion3.place(x=20,y=90)
 
-<<<<<<< Updated upstream
-    opcion4 = Button(ventanaAd , text="Verificar inventario", command = lambda:ventanaverificarinventario()))
-=======
+
     opcion4 = Button(ventanaAd , text="Verificar inventario",command= lambda:ventanaverificarinventario())
->>>>>>> Stashed changes
+
     opcion4.place(x=20,y=130)
     
     opcion5 = Button(ventanaAd , text="Reportes", command= lambda:ventanaReportes())
