@@ -985,6 +985,7 @@ productoscomprados = []
 #Retorna -6 si el codigo de maca no es un numero  
 #Retorna -7 si la cantidad a comprar no es un numero
 #Retorna -8 si la cantidad a comprar es mayor a la cantidad en gondola
+
 def comprando(CodPasillo,CodProducto,CodMarca,CantidadComprar):
     
     global pasillos,productosPasillo,marcasProductos,productoscomprados
@@ -2212,7 +2213,7 @@ def ventanaAdmin():
     opcion3 = Button(ventanaAd , text="Revisar gondolas",command= lambda:ventanaRevisarGondolas())
     opcion3.place(x=20,y=90)
 
-    opcion4 = Button(ventanaAd , text="Verificar inventario")
+    opcion4 = Button(ventanaAd , text="Verificar inventario", command = lambda:ventanaverificarinventario()))
     opcion4.place(x=20,y=130)
     
     opcion5 = Button(ventanaAd , text="Reportes", command= lambda:ventanaReportes())
