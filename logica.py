@@ -290,6 +290,7 @@ def verificar_inventario(CodMarca,Cantidad):
                  return messagebox.showinfo("En el inventario ahora hay",inventarios[i][3:5])
              else:
                 return messagebox.showinfo("Error en el codigo de pasillo","El Codigo ingresado no existe")
+            
 
         
 #Retorna -1 si el codigo adminstrador existe
@@ -899,21 +900,23 @@ def ClienteQueMasFacturo():
     else:
         return messagebox.showinfo("Cliente que mas facturo",moda(ClientesFacturados))
     
+
+    
 #9.Marcas de un producto
 #Retorna -1 si no se ha facturador nada
 #Retorna -2 si no existe el producto
-    
+lista1=[]    
 def MarcasDeUnProducto(CodProducto):
-    global productosPasillo
     global marcasProductos
-    Cod=CodProducto.get()
-    if RegistroTodasCompras==[]:
-         return messagebox.showinfo("Error en el reporte")
-    elif buscaEnLista(productosPasillo,Cod,1)== -1:
-         return messagebox.showinfo("Error en el reporte")
-    else:
-        Info=Hagalista(marcasProductos,Cod,1)
-        return messagebox.showinfo("Marcas de un Producto",Info)
+    m=marcasProductos
+    C=CodProducto.get()
+    for a in m:
+        if C==a[1]:
+            lista1.append(a[1:])
+    ventanaRepMarcasDeUnProducto()
+
+            
+
     
 #10.Factura de mayor monto
 #Retorna -1 si no se ha facturador nada
@@ -926,15 +929,15 @@ def FacturaDeMayorMonto():
         
 #11.Productos de un pasillo
 #Retorna -1 si el pasillo no existe
+lista2=[]
 def ProductosDeUnPasillo(CodPasillo):
-    global pasillos
     global productosPasillo
-    Cod=CodPasillo.get()
-    if buscaEnLista(pasillos,Cod,0)== -1:
-        return messagebox.showinfo("Error en el reporte")
-    else:
-        Info=((Hagalista(productosPasillo,Cod,0)))
-        return messagebox.showinfo("Productos de un pasillo",Info)
+    m=productosPasillo
+    C=CodPasillo.get()
+    for a in m:
+        if C==a[0]:
+            lista2.append(a[1:])
+    ventanaRepProductosDeUnPasillo()
     
 #12.Clientes del supermercado
 def ClientesDelSupermercado():
@@ -967,6 +970,46 @@ def PromedioPreciosDeUnProducto():
         else:
             result += [i,0]
     return result
+
+def ventanaRepMarcasDeUnProducto():
+    ventanaPasM = Toplevel() #Crea otra ventana aparte de la principal
+    ventanaPasM.geometry("700x700")
+    global lista1
+
+    listaPasillos = lista1#Devuelve la lista de Clientes, llama la función
+    total_Filas = len(listaPasillos) #Num de filas
+    total_Columnas = len(listaPasillos[0]) #Num columnas
+
+    #---Crear la tabla------
+    for i in range(total_Filas):
+        for j in range(total_Columnas):
+            Pas = Entry(ventanaPasM, width=20)
+                             #fg='black',
+                             #font=('Arial', 12, 'bold')) #Crea la entrada, el textbox
+            Pas.grid(row=i, column=j) #Coloca en la ventana
+            Pas.insert(END, listaPasillos[i][j]) #Inserta la información
+    botonRegresar = Button(ventanaPasM, text="Regresar", command=lambda:salirVentana(ventanaPasM))
+    botonRegresar.place(x=340, y=250)
+
+def ventanaRepProductosDeUnPasillo():
+    ventanaPasM = Toplevel() #Crea otra ventana aparte de la principal
+    ventanaPasM.geometry("700x700")
+    global lista2
+
+    listaPasillos = lista2#Devuelve la lista de Clientes, llama la función
+    total_Filas = len(listaPasillos) #Num de filas
+    total_Columnas = len(listaPasillos[0]) #Num columnas
+
+    #---Crear la tabla------
+    for i in range(total_Filas):
+        for j in range(total_Columnas):
+            Pas = Entry(ventanaPasM, width=20)
+                             #fg='black',
+                             #font=('Arial', 12, 'bold')) #Crea la entrada, el textbox
+            Pas.grid(row=i, column=j) #Coloca en la ventana
+            Pas.insert(END, listaPasillos[i][j]) #Inserta la información
+    botonRegresar = Button(ventanaPasM, text="Regresar", command=lambda:salirVentana(ventanaPasM))
+    botonRegresar.place(x=340, y=250)
         
 
 
