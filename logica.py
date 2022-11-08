@@ -2213,7 +2213,11 @@ def ventanaAdmin():
     opcion3 = Button(ventanaAd , text="Revisar gondolas",command= lambda:ventanaRevisarGondolas())
     opcion3.place(x=20,y=90)
 
+<<<<<<< Updated upstream
     opcion4 = Button(ventanaAd , text="Verificar inventario", command = lambda:ventanaverificarinventario()))
+=======
+    opcion4 = Button(ventanaAd , text="Verificar inventario",command= lambda:ventanaverificarinventario())
+>>>>>>> Stashed changes
     opcion4.place(x=20,y=130)
     
     opcion5 = Button(ventanaAd , text="Reportes", command= lambda:ventanaReportes())
