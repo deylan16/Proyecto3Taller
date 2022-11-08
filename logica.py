@@ -2146,7 +2146,7 @@ def ventanaComprar():
         finalizarCompra=Button(ventanaCm,text="Finalizar Compra", command= lambda:Comprar(cedulaActual))
         finalizarCompra.place(x=20,y=650)
     
-    Regresar=Button(ventanaCm,text="Regresar", command= lambda:ventanaProductos(ventanaCm))
+    Regresar=Button(ventanaCm,text="Regresar", command= lambda:salirVentana(ventanaCm))
     Regresar.place(x=620,y=650)
     
     ventanaCm.mainloop()
