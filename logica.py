@@ -331,14 +331,20 @@ def EliminarPasillo(CodPasillo,Nombre):
         i += 1
     if result != -1:
         listaCodigoProducto=buscaEnLista2(productosPasillo,CDP,0)
+        contador = 0
         for j in listaCodigoProducto:
-            productosPasillo.pop(j)
+            productosPasillo.pop(j-contador)
+            contador +=1
         listaCodigoMarcas=buscaEnLista2(marcasProductos,CDP,0)
+        contador = 0
         for m in listaCodigoMarcas:
-            marcasProductos.pop(m)
+            marcasProductos.pop(m-contador)
+            contador +=1
         listaCodigoInventario=buscaEnLista2(inventarios,CDP,0)
+        contador = 0
         for k in listaCodigoInventario:
-            inventarios.pop(k)
+            inventarios.pop(k-contador)
+            contador +=1
     ventanaPasillosMod()
     
 
@@ -355,16 +361,20 @@ def EliminarProducto (CodPasillo,CodProducto,Nombre):
     for n in listaCodigoProductoFila:
         if (n == [CDP,CPR,Nom]):
             productosPasillo.pop(listaCodigoProducto[i])
-            result = [CDP,CPRo,Nom]
+            result = [CDP,CPR,Nom]
         i += 1
     if result != -1:
         
         listaCodigoMarcas=buscaEnLista2(marcasProductos,CPR,1)
+        contador = 0
         for m in listaCodigoMarcas:
-            marcasProductos.pop(m)
+            marcasProductos.pop(m-contador)
+            contador +=1
         listaCodigoInventario=buscaEnLista2(inventarios,CPR,1)
+        contador = 0
         for k in listaCodigoInventario:
-            inventarios.pop(k)
+            inventarios.pop(k-contador)
+            contador +=1
     ventanaProductosMod()
 
 #Retorna -1 si  marca no existe
@@ -387,8 +397,10 @@ def EliminarMarca (CodPasillo,CodProducto,CodMarca,Nombre,CantidadGondola,Precio
         i += 1
     if result != -1:
         listaCodigoInventario=buscaEnLista2(inventarios,CDM,2)
+        contador = 0
         for k in listaCodigoInventario:
-            inventarios.pop(k)
+            inventarios.pop(k-contador)
+            contador +=1
     ventanaMarcaMod()
 
 #Retorna -1 si  marca no existe
@@ -636,11 +648,11 @@ def ModificarVendedores(CodVendedor,Nombre):
     listaCodigoVendedor=buscaEnLista2(Vendedores,Cod,0)
     if not(verificaNumero(Cod)):
         return messagebox.showinfo("Error")
-    elif (listaCodigoVendedorr)==[]:
+    elif (listaCodigoVendedor)==[]:
         return messagebox.showinfo("Error")
     else:
         nuevoVendedor = [Cod,Nom]
-        Vendedores[listaCodigoVendedorr[0]] = nuevoVendedor
+        Vendedores[listaCodigoVendedor[0]] = nuevoVendedor
         ventanaVMod()
 
 ###################################################
@@ -883,7 +895,7 @@ def MarcasDeUnProducto(CodProducto):
     elif buscaEnLista(productosPasillo,Cod,1)== -1:
          return messagebox.showinfo("Error en el reporte")
     else:
-        return messagebox.showinfo("Marcas de un producto",(Hagalista(marcasProductos,Cod,1))
+        return messagebox.showinfo("Marcas de un producto",(Hagalista(marcasProductos,Cod,1)))
     
 #10.Factura de mayor monto
 #Retorna -1 si no se ha facturador nada
@@ -903,7 +915,7 @@ def ProductosDeUnPasillo(CodPasillo):
     if buscaEnLista(pasillos,Cod,0)== -1:
         return messagebox.showinfo("Error en el reporte")
     else:
-       eturn messagebox.showinfo("Productos de un pasillo",((Hagalista(productosPasillo,Cod,0)))
+       return messagebox.showinfo("Productos de un pasillo",((Hagalista(productosPasillo,Cod,0))))
     
 #12.Clientes del supermercado
 def ClientesDelSupermercado():
@@ -1252,7 +1264,7 @@ def ventanaRepMarcasProductos():
     cajaprod = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
     cajaprod.place(x=230, y=10)
     
-    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda: MarcasDeUnProducto(cajapasillo))
+    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda: MarcasDeUnProducto(cajaprod))
     botonAceptar.place(x=250, y=250)
     botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
     botonRegresar.place(x=340, y=250)
@@ -1496,7 +1508,7 @@ def ventanaInsertProd():
     cajanombre = Entry(ventanaMPR) #Caja de texto donde almacena/captura lo que el usuario ingresa
     cajanombre.place(x=250, y=90)
     
-    botonAceptar = Button(ventanaMPR, text="Aceptar", command=lambda: InsertarProducto(cajapasillo,cajaproducto,cajanombre))
+    botonAceptar = Button(ventanaMPR, text="Aceptar", command=lambda: Productonuevo(cajapasillo,cajaproducto,cajanombre))
     botonAceptar.place(x=250, y=250)
     botonRegresar = Button(ventanaMPR, text="Regresar", command=lambda:salirVentana(ventanaMPR))
     botonRegresar.place(x=340, y=250)
@@ -1536,7 +1548,7 @@ def ventanaInsertMarc():
     cajaprec = Entry(ventanaMM) #Caja de texto donde almacena/captura lo que el usuario ingresa
     cajaprec.place(x=250, y=210)
     
-    botonAceptar = Button(ventanaMM, text="Aceptar", command=lambda: InsertarMarca(cajapasillo,cajaproducto,cajamarca,cajanom,cajagon,cajaprec))
+    botonAceptar = Button(ventanaMM, text="Aceptar", command=lambda: Marcanueva(cajapasillo,cajaproducto,cajamarca,cajanom,cajagon,cajaprec))
     botonAceptar.place(x=250, y=250)
     botonRegresar = Button(ventanaMM, text="Regresar", command=lambda:salirVentana(ventanaMM))
     botonRegresar.place(x=340, y=250)
@@ -1626,7 +1638,7 @@ def ventanaInsertAdm():
     cajanom = Entry(ventanaA) #Caja de texto donde almacena/captura lo que el usuario ingresa
     cajanom.place(x=250, y=50)
     
-    botonAceptar = Button(ventanaA, text="Aceptar", command=lambda: InsertarAdministradores(cajacod,cajanom))
+    botonAceptar = Button(ventanaA, text="Aceptar", command=lambda: RegistrarAdministradores(cajacod,cajanom))
     botonAceptar.place(x=250, y=250)
     botonRegresar = Button(ventanaA, text="Regresar", command=lambda:salirVentana(ventanaA))
     botonRegresar.place(x=340, y=250)
@@ -1646,7 +1658,7 @@ def ventanaInsertVen():
     cajanom = Entry(ventanaV) #Caja de texto donde almacena/captura lo que el usuario ingresa
     cajanom.place(x=250, y=50)
     
-    botonAceptar = Button(ventanaV, text="Aceptar", command=lambda: InsertarVendedores(cajacod,cajanom))
+    botonAceptar = Button(ventanaV, text="Aceptar", command=lambda: RegistrarVendedores(cajacod,cajanom))
     botonAceptar.place(x=250, y=250)
     botonRegresar = Button(ventanaV, text="Regresar", command=lambda:salirVentana(ventanaV))
     botonRegresar.place(x=340, y=250)
