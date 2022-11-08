@@ -744,7 +744,7 @@ def facturar():
             cantidad = facturando[1][i][4] 
             precio = facturando[1][i][5]
             producto = facturando[1][i][3]
-            string = ""+producto+"\t"+cantidad+"\n"+precio
+            string = ""+producto+"\t"+cantidad+"\t"+precio 
             ListaProductos += [[facturando[1][i][2],facturando[1][i][4]]]
             productoMarca1 = buscaEnLista(marcasProductos,facturando[1][i][2],2)
             print(marcasProductos[productoMarca1][4] )
@@ -1138,7 +1138,7 @@ def Comprar(cedula):
         productoscomprados = []
     print(marcasProductos)
     print("*************\n")
-    print(PromedioPreciosDeUnProducto())
+    
     
     
 def ventanaConsultarDescuentoAdmin():
@@ -1211,11 +1211,20 @@ def ventanaConsultarPrecio():
     botonRegresar.place(x=340, y=250)
      
 def cargarGondolas(lista,matriz):
+    global ProductoCantidaCargados
     for i in lista:
         marcasProductos[i[0]][4] = matriz[i[0]][4].get() 
-        print(inventarios[i[0]])
+        pos = buscaEnLista(ProductoCantidaCargados,marcasProductos[i[0]][4],0)
+        if pos == -1:
+            ProductoCantidaCargados = [[marcasProductos[i[0]][3],((int)(marcasProductos[i[0]][4])-(int)(i[1] ))]]+productoscomprados
+        else:
+            ProductoCantidaCargados[pos][1] += (int)(inventarios[i[0]][4])-((int)(marcasProductos[i[0]][4])-(int)(i[1] ))
+        
+                
+        
         inventarios[i[0]][4] = (int)(inventarios[i[0]][4])-((int)(marcasProductos[i[0]][4])-(int)(i[1] ))
-        print(inventarios[i[0]])
+    print(ProductoCantidaCargados)
+        
 def ventanaRevisarGondolas():
     ventanaMarM = Toplevel() #Crea otra ventana aparte de la principal
     ventanaMarM.geometry("700x700")
