@@ -2788,10 +2788,10 @@ def ventanaVende():
     opcion2 = Button(ventanaV , text="Consultar Descuento de un cliente",command= lambda: ventanaConsultarDescuentoAdmin2())
     opcion2.place(x=20,y=50)
 
-    opcion3 = Button(ventanaV, text="Consultar Productos de un pasillo")
+    opcion3 = Button(ventanaV, text="Consultar Productos de un pasillo", command = lambda:ventanaRepProductosDeUnPasillo())
     opcion3.place(x=20,y=90)
 
-    opcion4 = Button(ventanaV , text="Consultar Marcas de un producto")
+    opcion4 = Button(ventanaV , text="Consultar Marcas de un producto", command = lambda:ventanaRepMarcasDeUnProducto())
     opcion4.place(x=20,y=130)
 
     Regresar = Button(ventanaV,text="Regresar", command = lambda:salirVentana(ventanaV))
