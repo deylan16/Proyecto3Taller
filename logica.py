@@ -2017,13 +2017,13 @@ def ventanaReportes():
     opcion8 = Button(ventanaRep , text="Cliente que más facturo", command = lambda:ClienteQueMasFacturo())
     opcion8.place(x=20,y=290)
 
-    opcion9 = Button(ventanaRep , text="Marcas de un producto", command = lambda:ventanaRepMarcasProductos())
+    opcion9 = Button(ventanaRep , text="Marcas de un producto", command = lambda:MarcasDeUnProducto(CodProducto))
     opcion9.place(x=20,y=330)
 
     opcion10 = Button(ventanaRep , text="Factura de mayor monto", command = lambda:FacturaDeMayorMonto())
     opcion10.place(x=20,y=370)
     
-    opcion11 = Button(ventanaRep , text="Productos de un pasillo", command = lambda:ventanaRepProductosPasillo())
+    opcion11 = Button(ventanaRep , text="Productos de un pasillo", command = lambda:ProductosDeUnPasillo(CodPasillo))
     opcion11.place(x=20,y=410)
 
     opcion12 = Button(ventanaRep , text="Clientes del supermercado", command = lambda:ClientesDelSupermercado())
@@ -2057,7 +2057,7 @@ def ventanaAdmin():
     opcion1 = Button(ventanaAd , text="Mantenimiento de la Base de Datos", command = lambda:ventanaManteB())
     opcion1.place(x=20,y=10)
 
-    opcion2 = Button(ventanaAd , text="Facturar")
+    opcion2 = Button(ventanaAd , text="Facturar",command=lambda: facturar())
     opcion2.place(x=20,y=50)
 
     opcion3 = Button(ventanaAd , text="Revisar gondolas")
