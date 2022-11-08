@@ -1032,6 +1032,118 @@ def Comprar(cedula):
     print(marcasProductos)
     print("*************\n")
     print(PromedioPreciosDeUnProducto())
+    
+    
+def ventanaConsultarDescuentoAdmin():
+    ventanaMP= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
+    ventanaMP.geometry("400x300")
+    ventanaMP.title("Modificar Pasillo")
+
+    codpasillo= Label(ventanaMP, text="Ingrese el porcentaje de descuento")
+    codpasillo.place(x=30, y=10)
+    cajapasillo = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajapasillo.insert(0, porcentajeDescuento)
+    cajapasillo.place(x=230, y=10)
+
+    codnombre= Label(ventanaMP, text="Ingrese el numero de facturas requeridas")
+    codnombre.place(x=70, y=50)
+    cajanombre = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajanombre.insert(0, cantidadDescuento)
+    cajanombre.place(x=230, y=50)
+    
+    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda:ModificarDescuento(cajanombre.get(),cajapasillo.get()))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
+    botonRegresar.place(x=340, y=250)
+
+
+def mensajeDescuento2(cedula):
+    
+    if descuento(cedula):
+        messagebox.showinfo("Descuento","Si tiene descuento de un" + str(ConsultarDescuento()[1])+"%")
+    else:
+        messagebox.showinfo("Descuento","No tiene descuento son requeridas "+ str( ConsultarDescuento()[0])+ " facturas")
+        
+def ventanaConsultarDescuentoAdmin2():
+    ventanaMP= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
+    ventanaMP.geometry("400x300")
+    ventanaMP.title("Modificar Pasillo")
+
+    codpasillo= Label(ventanaMP, text="Ingrese la cedula que quiere consultar")
+    codpasillo.place(x=30, y=10)
+    cajapasillo = Entry(ventanaMP) #Caja de texto donde almacena/captura lo que el usuario ingresa
+    cajapasillo.insert(0, porcentajeDescuento)
+    cajapasillo.place(x=230, y=10)
+    
+    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda:mensajeDescuento2(cajapasillo.get()))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
+    botonRegresar.place(x=340, y=250)
+
+
+def mensajePrecio(marca):
+    
+    
+    messagebox.showinfo("Precio","Tiene un precio de: "+ str( Hagalista(marcasProductos,marca,3)[0][5]))
+def ventanaConsultarPrecio():
+    lista = []
+    for i in marcasProductos:
+        lista += [i[3]]
+    ventanaMP= Toplevel() #Crea otra ventana aparte de la principal para verificar administrador
+    ventanaMP.geometry("400x300")
+    ventanaMP.title("consultar Precio")
+
+    codpasillo= Label(ventanaMP, text="Ingrese la cedula que quiere consultar")
+    codpasillo.place(x=30, y=10)
+    combo = ttk.Combobox(ventanaMP,values=lista,state="readonly")
+    combo.place(x=20, y=60)
+    
+    botonAceptar = Button(ventanaMP, text="Aceptar", command=lambda:mensajePrecio(combo.get()))
+    botonAceptar.place(x=250, y=250)
+    botonRegresar = Button(ventanaMP, text="Regresar", command=lambda:salirVentana(ventanaMP))
+    botonRegresar.place(x=340, y=250)
+     
+def cargarGondolas(lista,matriz):
+    for i in lista:
+        marcasProductos[i[0]][4] = matriz[i[0]][4].get() 
+        print(inventarios[i[0]])
+        inventarios[i[0]][4] = (int)(inventarios[i[0]][4])-((int)(marcasProductos[i[0]][4])-(int)(i[1] ))
+        print(inventarios[i[0]])
+def ventanaRevisarGondolas():
+    ventanaMarM = Toplevel() #Crea otra ventana aparte de la principal
+    ventanaMarM.geometry("700x700")
+
+    listamarca = marcasProductos #Devuelve la lista de Clientes, llama la función
+    total_Filas = len(listamarca)-1 #Num de filas
+    total_Columnas = len(listamarca[0]) #Num columnas
+
+    #---Crear la tabla------
+    matriz = []
+    sublista = []
+    lista = []
+    for i in range(total_Filas):
+        sublista = []
+        if ((int)(listamarca[i][4]) <= 2):
+            for j in range(total_Columnas):
+                Mar = Entry(ventanaMarM, width=20)
+                                #fg='black',
+                                #font=('Arial', 12, 'bold')) #Crea la entrada, el textbox
+                Mar.grid(row=i, column=j) #Coloca en la ventana
+                Mar.insert(END, listamarca[i][j])
+                
+                
+                
+                if j != 4:
+                    Mar.config(state="readonly")
+                sublista += [Mar]
+            lista += [[i,listamarca[i][4]]]
+        matriz+= [sublista]
+             #Inserta la información
+    botonRegresar = Button(ventanaMarM, text="Aceptar", command=lambda:cargarGondolas(lista,matriz))
+    botonRegresar.place(x=10, y=550)
+    botonRegresar = Button(ventanaMarM, text="Regresar", command=lambda:salirVentana(ventanaMarM))
+    botonRegresar.place(x=540, y=550)
+        
 #---------------------------Ventana Mostrar Info Final Modicar-------------------------------
 def ventanaPasillosMod():
     ventanaPasM = Toplevel() #Crea otra ventana aparte de la principal
@@ -1872,8 +1984,6 @@ def ventanaEliminVen():
     botonRegresar.place(x=340, y=250)
 #---------------------------Ventana de Mantenimiento de la base de datos-------------------------------
 
-
-
 def ventanaInsert():
     ventanaI = Toplevel()
     ventanaI.geometry("340x340")
@@ -1975,13 +2085,13 @@ def ventanaManteB():
     opcion3 = Button(ventanaMB , text="Modificar",command = lambda:ventanaModificar())
     opcion3.place(x=20,y=90)
 
-    opcion4 = Button(ventanaMB , text="Consultar Precio")
+    opcion4 = Button(ventanaMB , text="Consultar Precio",command= lambda: ventanaConsultarPrecio())
     opcion4.place(x=20,y=130)
     
-    opcion5 = Button(ventanaMB , text="Consultar Descuento")
+    opcion5 = Button(ventanaMB , text="Consultar Descuento",command= lambda: ventanaConsultarDescuentoAdmin2())
     opcion5.place(x=20,y=170)
 
-    opcion6 = Button(ventanaMB , text="Modificar el Descuento")
+    opcion6 = Button(ventanaMB , text="Modificar el Descuento",command= lambda:ventanaConsultarDescuentoAdmin())
     opcion6.place(x=20,y=210)
 
     Regresar = Button(ventanaMB,text="Regresar", command = lambda:salirVentana(ventanaMB))
@@ -2060,7 +2170,7 @@ def ventanaAdmin():
     opcion2 = Button(ventanaAd , text="Facturar",command=lambda: facturar())
     opcion2.place(x=20,y=50)
 
-    opcion3 = Button(ventanaAd , text="Revisar gondolas")
+    opcion3 = Button(ventanaAd , text="Revisar gondolas",command= lambda:ventanaRevisarGondolas())
     opcion3.place(x=20,y=90)
 
     opcion4 = Button(ventanaAd , text="Verificar inventario")
@@ -2077,7 +2187,7 @@ def ventanaClienR():
     ventanaCr.geometry("340x340")
     ventanaCr.title("Cliente Registrado")
 
-    opcion1 = Button(ventanaCr , text="Consultar Precio")
+    opcion1 = Button(ventanaCr , text="Consultar Precio",command= lambda: ventanaConsultarPrecio())
     opcion1.place(x=20,y=10)
 
     opcion2 = Button(ventanaCr , text="Consultar Descuento",command=lambda:mensajeDescuento())
@@ -2543,7 +2653,7 @@ def ventanaClienNR():
     opcion2 = Button(ventanaCnr , text="Consultar Descuento",fg = "grey")
     opcion2.place(x=20,y=50)
 
-    opcion3 = Button(ventanaCnr, text="Consultar Productos")
+    opcion3 = Button(ventanaCnr, text="Consultar Productos",command=lambda:consultarProductos2())
     opcion3.place(x=20,y=90)
 
     opcion4 = Button(ventanaCnr , text="Comprar",fg = "grey")
@@ -2559,10 +2669,10 @@ def ventanaVende():
     ventanaV.geometry("340x340")
     ventanaV.title("Vendedor")
 
-    opcion1 = Button(ventanaV , text="Consultar Precio")
+    opcion1 = Button(ventanaV , text="Consultar Precio",command= lambda: ventanaConsultarPrecio())
     opcion1.place(x=20,y=10)
 
-    opcion2 = Button(ventanaV , text="Consultar Descuento de un cliente")
+    opcion2 = Button(ventanaV , text="Consultar Descuento de un cliente",command= lambda: ventanaConsultarDescuentoAdmin2())
     opcion2.place(x=20,y=50)
 
     opcion3 = Button(ventanaV, text="Consultar Productos de un pasillo")

@@ -1,4 +1,4 @@
-Consecutivo Factura: #0
+Consecutivo Factura: #2
 
 Cedula:1234567
 Nombre:Juan Perez
