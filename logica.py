@@ -947,14 +947,14 @@ def PromedioPreciosDeUnProducto():
             result += [i,suma/len(productos)]
         else:
             result += [i,0]
-    return messagebox.showinfo("Promedio precios",result)
+    return result
         
 
 
 
 #########################
 #comprar
-CedulaClienteActual = "1234567";   
+cedulaActual = ""
 productoscomprados = []
 
 #agrega producto al carrito
@@ -1016,7 +1016,9 @@ def EliminarProductoCarrito(CodPasillo,CodProducto,CodMarca):
 #agrega carrito a facturar  
 #Retorna -1 si no se ha comprado nada  
 def Comprar(cedula):
+    
     global registroTienda,productoscomprados
+    print(productoscomprados)
     if productoscomprados == []:
         return -1
     else:
